@@ -1,0 +1,15 @@
+.section {
+    padding: 0;
+}
+
+.fixed {
+    position: fixed;
+}
+
+.entrar {
+    background-color: #0d47a1;
+}
+
+.cadastrar {
+    background-color: #bf360c;
+}
