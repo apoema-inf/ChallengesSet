@@ -1,12 +1,14 @@
 <div class="navbar-fixed">
   <nav>
-    <div class="nav-wrapper blue-grey lighten-5">
+    <div class="nav-wrapper color">
       <div class="container">
         <a href="#!" class="brand-logo"><img src="assets/images/logo-charset.png"></a>
         <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">dehaze</i></a>
         <ul class="right hide-on-med-and-down">
-          <li routerLinkActive="active"><a routerLink="/home">Home</a></li>
-          <li routerLinkActive="active"><a routerLink="/servicos" href="badges.html">Desafios</a></li>
+          <li routerLinkActive="active"><a routerLink="/home"><b>Home</b></a></li>
+          <li routerLinkActive="active"><a routerLink="/desafios"><b>Desafios</b></a></li>
+          <li routerLinkActive="active"><a routerLink="/solucionadores"><b>Solucionadores</b></a></li>
+          <li routerLinkActive="active"><a routerLink="/demandantes"><b>Demandantes</b></a></li>
         </ul>
       </div>
 
@@ -15,8 +17,83 @@
 </div>
 
 <ul class="sidenav" id="mobile-demo">
-  <li><a href="sass.html">Home</a></li>
-  <li><a href="badges.html">Desafios</a></li>
+    <li routerLinkActive="active"><a routerLink="/home"><b>Home</b></a></li>
+    <li routerLinkActive="active"><a routerLink="/desafios"><b>Desafios</b></a></li>
+    <li routerLinkActive="active"><a routerLink="/solucionadores"><b>Solucionadores</b></a></li>
+    <li routerLinkActive="active"><a routerLink="/demandantes"><b>Demandantes</b></a></li>
 </ul>
 
 <router-outlet></router-outlet>
+
+<div class="white">
+  <div class="divider"></div>
+  <div class="container">
+    <div class="row" style="padding-top: 5vh;padding-bottom: 5vh; margin:0px;">
+      <div class="col offset-l2 l3 offset-m1 m3 s12">
+        <a href="http://www.inf.ufg.br" target="_blank">
+          <img src="assets/images/logoinf.png" style="max-width:12rem">
+        </a>
+      </div>
+      <div class="col offset-l2 l3 offset-m1 m3 s12">
+        <a href="http://apoema.inf.ufg.br" target="_blank">
+          <img src="assets/images/logoapoema.png" style="max-width:12rem">
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer class="page-footer light-blue darken-3">
+  <div class="container">
+    <div class="row">
+      <div class="col l6 s12" align="middle">
+        <img src="assets/images/logo-charset.png" style="height: 70px;">
+        <p class="grey-text text-lighten-4">Alameda Palmeiras, s/n - Câmpus Samambaia, Goiânia - GO, 74690-900, 2° Andar, Sala 244 - APOEMA</p>
+      </div>
+      <div class="col l2 s12" align="right">
+        <h5 class="white-text">Links</h5>
+        <ul>
+          <li>
+            <a class="grey-text text-lighten-3 " href="#" [routerLink]="['']" >Home</a>
+          </li>
+          <li>
+            <a class="grey-text text-lighten-3 " href="#" [routerLink]="['/desafios']">Desafios</a>
+          </li>
+        </ul>
+      </div>
+      <div class="col l2 s12" align="right">
+        <h5 class="white-text">Parceiros</h5>
+        <ul>
+          <li>
+            <a class="grey-text text-lighten-3 " href="#">Parceiro1</a>
+          </li>
+          <li>
+            <a class="grey-text text-lighten-3 " href="#">Parceiro2</a>
+          </li>
+          <li>
+            <a class="grey-text text-lighten-3 " href="#">Parceiro3</a>
+          </li>
+        </ul>
+      </div>
+      <div class="col l2 s12" align="right">
+        <h5 class="white-text">Contato</h5>
+        <ul>
+          <li>
+            challengeset@inf.ufg.br
+          </li>
+          <li>
+            (62) 3521-1724
+          </li>
+          <li>
+            (62) 3521-1505
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="footer-copyright light-blue darken-4">
+    <div class="container">
+      © Criado por APOEMA/INF - 2018
+    </div>
+  </div>
+</footer>

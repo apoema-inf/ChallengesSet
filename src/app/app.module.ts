@@ -4,7 +4,9 @@ import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { RouterModule, Routes } from '@angular/router';
-import { ServicosComponent } from './servicos/servicos.component';
+import { DesafiosComponent } from './desafios/desafios.component';
+import { SolucionadoresComponent } from './solucionadores/solucionadores.component';
+import { DemandantesComponent } from './demandantes/demandantes.component';
 
 const appRoutes: Routes = [
   {
@@ -13,9 +15,19 @@ const appRoutes: Routes = [
     data: { title: 'Home' }
   },
   {
-    path: 'servicos',
-    component: ServicosComponent,
-    data: { title: 'Serviços' }
+    path: 'desafios',
+    component: DesafiosComponent,
+    data: { title: 'Desafios' }
+  },
+  {
+    path: 'solucionadores',
+    component: SolucionadoresComponent,
+    data: { title: 'Solucionadores' }
+  },
+  {
+    path: 'demandantes',
+    component: DemandantesComponent,
+    data: { title: 'Demandantes' }
   },
   { path: '',
     redirectTo: '/home',
@@ -27,7 +39,9 @@ const appRoutes: Routes = [
   declarations: [
     AppComponent,
     HomeComponent,
-    ServicosComponent
+    DesafiosComponent,
+    SolucionadoresComponent,
+    DemandantesComponent
   ],
   imports: [
     RouterModule.forRoot(

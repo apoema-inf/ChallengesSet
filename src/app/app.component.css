@@ -1,3 +1,17 @@
 nav ul a {
     color: #263238;
 }
+
+nav li:hover {
+    background-color: white;
+}
+
+.scrolled {
+    background-color: #fff !important;
+    transition: background-color 250ms linear;
+}
+
+.color {
+    background-color: #01579b;
+    transition: background-color 250ms linear;
+}
