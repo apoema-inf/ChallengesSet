@@ -13,3 +13,8 @@
 .cadastrar {
     background-color: #bf360c;
 }
+
+.img-home {
+    background: url('http://www.ucatx.cat/wallpic/full/142/1428846/strategy-wallpaper.jpg') no-repeat center center;
+    background-size: cover;
+}
