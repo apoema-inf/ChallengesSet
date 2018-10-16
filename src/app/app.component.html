@@ -17,10 +17,10 @@
 </div>
 
 <ul class="sidenav" id="mobile-demo">
-    <li routerLinkActive="active"><a routerLink="/home"><b>Home</b></a></li>
-    <li routerLinkActive="active"><a routerLink="/desafios"><b>Desafios</b></a></li>
-    <li routerLinkActive="active"><a routerLink="/solucionadores"><b>Solucionadores</b></a></li>
-    <li routerLinkActive="active"><a routerLink="/demandantes"><b>Demandantes</b></a></li>
+  <li routerLinkActive="active"><a routerLink="/home"><b>Home</b></a></li>
+  <li routerLinkActive="active"><a routerLink="/desafios"><b>Desafios</b></a></li>
+  <li routerLinkActive="active"><a routerLink="/solucionadores"><b>Solucionadores</b></a></li>
+  <li routerLinkActive="active"><a routerLink="/demandantes"><b>Demandantes</b></a></li>
 </ul>
 
 <router-outlet></router-outlet>
@@ -48,17 +48,20 @@
     <div class="row">
       <div class="col l6 s12" align="middle">
         <img src="assets/images/logo-charset.png" style="height: 70px;">
-        <p class="grey-text text-lighten-4">Alameda Palmeiras, s/n - Câmpus Samambaia, Goiânia - GO, 74690-900, 2° Andar, Sala 244 - APOEMA</p>
+        <p class="grey-text text-lighten-4">Alameda Palmeiras, s/n - Câmpus Samambaia, Goiânia - GO, 74690-900, 2°
+          Andar, Sala 244 - APOEMA</p>
       </div>
       <div class="col l2 s12" align="right">
         <h5 class="white-text">Links</h5>
         <ul>
           <li>
-            <a class="grey-text text-lighten-3 " href="#" [routerLink]="['']" >Home</a>
+            <a class="grey-text text-lighten-3 " href="#" [routerLink]="['']">Home</a>
           </li>
           <li>
             <a class="grey-text text-lighten-3 " href="#" [routerLink]="['/desafios']">Desafios</a>
           </li>
+          <li><a routerLink="/solucionadores">Solucionadores</a></li>
+          <li><a routerLink="/demandantes">Demandantes</a></li>
         </ul>
       </div>
       <div class="col l2 s12" align="right">
