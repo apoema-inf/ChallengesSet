@@ -3,3 +3,7 @@
 .brand-logo img{
     height: 45px;
 }
+
+.font-bold {
+    font-weight: 600;
+}

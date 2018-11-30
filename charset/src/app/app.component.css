@@ -1,9 +1,13 @@
 nav ul a {
-    color: #263238;
+    color: white;
 }
 
 nav li:hover {
     background-color: white;
+}
+
+nav ul a:hover {
+    color: #263238;
 }
 
 .scrolled {

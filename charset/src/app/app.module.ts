@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
@@ -7,6 +8,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { DesafiosComponent } from './desafios/desafios.component';
 import { SolucionadoresComponent } from './solucionadores/solucionadores.component';
 import { DemandantesComponent } from './demandantes/demandantes.component';
+import { HttpClientModule } from '@angular/common/http';
+import { CadastroComponent } from './cadastro/cadastro.component';
 
 const appRoutes: Routes = [
   {
@@ -29,6 +32,11 @@ const appRoutes: Routes = [
     component: DemandantesComponent,
     data: { title: 'Demandantes' }
   },
+  {
+    path: 'cadastro',
+    component: CadastroComponent,
+    data: { title: 'Cadastro' }
+  },
   { path: '',
     redirectTo: '/home',
     pathMatch: 'full'
@@ -41,14 +49,17 @@ const appRoutes: Routes = [
     HomeComponent,
     DesafiosComponent,
     SolucionadoresComponent,
-    DemandantesComponent
+    DemandantesComponent,
+    CadastroComponent
   ],
   imports: [
     RouterModule.forRoot(
       appRoutes,
       { enableTracing: true } // <-- debugging purposes only
     ),
-    BrowserModule
+    BrowserModule,
+    HttpClientModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

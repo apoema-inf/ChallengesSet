@@ -11,23 +11,23 @@
                                     <div class="row">
                                         <div class="input-field col s12">
                                             <i style="color:white;" class="material-icons prefix">account_circle</i>
-                                            <input id="icon_prefix" type="text" class="validate">
-                                            <label for="icon_prefix">Usuário</label>
+                                            <input id="user" type="text" class="validate" >
+                                            <label for="user">Usuário</label>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="input-field col s12">
                                             <i style="color:white;" class="material-icons prefix">lock</i>
-                                            <input id="icon_telephone" type="password" class="validate">
-                                            <label for="icon_telephone">Senha</label>
+                                            <input id="senha" type="password" class="validate" >
+                                            <label for="senha">Senha</label>
                                         </div>
                                     </div>
                                     <div><a href="#">Esqueceu sua senha?</a></div>
                                 </form>
                             </div>
                             <div class="card-action">
-                                <div class="left"><a class="entrar waves-effect waves-light btn">Entrar</a></div>
-                                <div class="right"><a class="cadastrar waves-effect waves-light btn" href="#">Cadastre-se</a></div>
+                                <div class="left"><a class="entrar waves-effect waves-light btn" (click)="getDados()">Entrar</a></div>
+                                <div class="right"><a class="cadastrar waves-effect waves-light btn" routerLink="/cadastro">Cadastre-se</a></div>
                             </div>
                         </div>
                     </div>
