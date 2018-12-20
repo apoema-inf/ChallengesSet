@@ -9,6 +9,7 @@
           <li routerLinkActive="active"><a routerLink="/desafios"><b>Desafios</b></a></li>
           <li routerLinkActive="active"><a routerLink="/solucionadores"><b>Solucionadores</b></a></li>
           <li routerLinkActive="active"><a routerLink="/demandantes"><b>Demandantes</b></a></li>
+          <a (click)="logout()" *ngIf="authService.user | async" class="btn red"><b>Log out</b></a>
         </ul>
       </div>
 

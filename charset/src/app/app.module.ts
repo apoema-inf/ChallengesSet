@@ -10,7 +10,14 @@ import { SolucionadoresComponent } from './solucionadores/solucionadores.compone
 import { DemandantesComponent } from './demandantes/demandantes.component';
 import { HttpClientModule } from '@angular/common/http';
 import { CadastroComponent } from './cadastro/cadastro.component';
+import { AngularFirestoreModule } from 'angularfire2/firestore';
+import { AngularFireModule } from 'angularfire2';
+import { environment } from '../environments/environment';
+import { AngularFireAuthModule } from 'angularfire2/auth';
+import { AuthService } from './auth.service';
+import { AuthGuard } from './auth-guard.service';
 
+//import { AuthService } from './auth.service';
 const appRoutes: Routes = [
   {
     path: 'home',
@@ -20,7 +27,8 @@ const appRoutes: Routes = [
   {
     path: 'desafios',
     component: DesafiosComponent,
-    data: { title: 'Desafios' }
+    data: { title: 'Desafios' },
+    canActivate: [AuthGuard]
   },
   {
     path: 'solucionadores',
@@ -59,9 +67,12 @@ const appRoutes: Routes = [
     ),
     BrowserModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFireAuthModule,
+    AngularFirestoreModule
   ],
-  providers: [],
+  providers: [AuthService, AuthGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

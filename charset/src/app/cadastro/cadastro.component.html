@@ -1,6 +1,7 @@
 <div class="container">
+  <h4 class="blue-grey-text text-darken-1"><b>Cadastro de novo usuário</b></h4>
   <div class="row">
-    <form class="col s12">
+    <form id="cadastroForm" class="col s12">
       <div class="row">
         <div class="input-field col s6">
           <input [(ngModel)]="user.nome" id="nome" type="text" class="validate" name="nome">
@@ -17,14 +18,15 @@
           <label for="email">Email</label>
         </div>
         <div class="input-field col s6">
-          <select [(ngModel)]="user.profile" name="profile" id="profile">
-            <option [ngValue]='0' selected>Solucionador</option>
-            <option [ngValue]='1'>Demandante</option>
+          <select [(ngModel)]="user.profile" name="profile">
+            <option value='' disabled selected>Perfil de usuário</option>
+            <option value='Solucionador'>Solucionador</option>
+            <option value='Demandante'>Demandante</option>
+            <option value='Ambos'>Ambos</option>
           </select>
-          <label>Perfil de usuário</label>
         </div>
       </div>
-      <button class="waves-effect waves-light btn green" (click)="createUser()">Cadastrar</button>
+      <button class="waves-effect waves-light btn green" (click)="signup()">Cadastrar</button>
     </form>
   </div>
 </div>

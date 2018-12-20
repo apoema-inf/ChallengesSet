@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from './auth.service';
 
 declare var $: any;
 
@@ -19,6 +20,11 @@ export class AppComponent implements OnInit {
       });
     });
 
+  }
 
+  constructor(public authService: AuthService) {}
+
+  logout() {
+    this.authService.logout();
   }
 }

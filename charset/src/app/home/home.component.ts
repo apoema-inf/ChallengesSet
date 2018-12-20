@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { LoginService } from '../login.service';
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-home',
@@ -7,23 +7,15 @@ import { LoginService } from '../login.service';
   styleUrls: ['./home.component.css']
 })
 
-export class HomeComponent implements OnInit {
+export class HomeComponent {
 
-  dado:any;
+  email: string;
+  password: string;
 
-  user:any;
-  senha:any;
+  constructor(public authService: AuthService) { }
 
-  constructor(private _servicoLogin : LoginService) { }
-
-  ngOnInit() {
-  }
-
-  getDados() {
-    this._servicoLogin.getDados().subscribe(dados => {
-      this.dado = dados;
-      console.log(this.dado);
-    })
+  login() {
+    this.authService.login(this.email, this.password);
   }
 
 }
