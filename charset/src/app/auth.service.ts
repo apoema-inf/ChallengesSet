@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import { AngularFireAuth } from 'angularfire2/auth';
-import { AngularFirestore } from 'angularfire2/firestore';
+import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 import * as firebase from 'firebase/app';
 
 import { Observable } from 'rxjs';
@@ -16,7 +16,7 @@ export class AuthService {
   firebase: any;
 
   constructor(public firebaseAuth: AngularFireAuth, private db: AngularFirestore,
-    private router: Router,) {
+    private router: Router, ) {
     this.user = firebaseAuth.authState;
   }
 
@@ -41,10 +41,21 @@ export class AuthService {
   }
 
   login(email: string, password: string) {
+    var that = this;
     this.firebaseAuth
       .auth
       .signInWithEmailAndPassword(email, password)
       .then(value => {
+        that.db.collection('users', ref => ref.where('email', '==', email))
+          .get()
+          .toPromise()
+          .then((value) => {
+            that.db.collection('users').doc(value.docs[0].id).ref.get().then(documentSnapshot => {
+              localStorage.setItem('user', JSON.stringify(documentSnapshot.data()));
+              
+            })
+          });
+
         M.toast({ html: 'Usuário autenticado', classes: 'rounded' });
         this.router.navigate(['/desafios']);
       })
@@ -54,11 +65,13 @@ export class AuthService {
   }
 
   logout() {
+    var that = this;
     this.firebaseAuth
       .auth
-      .signOut().then( function () {
+      .signOut().then(function () {
+        that.router.navigate(['/home']);
         M.toast({ html: 'Usuário deslogado', classes: 'rounded' });
-        this.router.navigate(['/home']);
+        localStorage.clear();
       });
   }
 

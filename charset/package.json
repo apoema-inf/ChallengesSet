@@ -24,6 +24,7 @@
     "core-js": "^2.5.4",
     "firebase": "^5.7.0",
     "materialize-css": "^1.0.0",
+    "ngx-pipes": "^2.3.6",
     "rxjs": "~6.2.0",
     "zone.js": "~0.8.26"
   },

@@ -2,42 +2,179 @@
   <h4 class="font-bold blue-text text-darken-3">Desafios
     <hr>
   </h4>
+  <a class="waves-effect waves-light btn modal-trigger green darken-1" href="#modal1"><i class="material-icons left">add</i>Criar
+    novo</a>
+  &nbsp;
+  <a class='dropdown-trigger btn  light-blue darken-3' href='#' data-target='dropdownVer'><i class="material-icons right">arrow_drop_down</i>
+    Ver</a>
+  <ul id='dropdownVer' class='dropdown-content'>
+    <li> <a (click)="setUserEmail()" class="waves-effect waves-light "><i class="material-icons left">person_pin</i>Meus
+        Desafios</a>
+    </li>
+    <li><a (click)="cleanFilters()" class="waves-effect waves-light "><i class="material-icons left">all_inclusive</i>Todos
+        os Desafios</a></li>
+    <li><a (click)="setSolucoesFilter()" class="waves-effect waves-light "><i class="material-icons left">lightbulb_outline</i>Minhas
+        soluções</a></li>
+  </ul>
+
   <ul class="collapsible popout">
-    <li>
+    <li *ngFor="let desafio of desafios | async | filterBy: ['emaildemandante']: userEmail">
       <div class="collapsible-header">
-        First
+        {{desafio.nome}}
+
         <div class="row"></div>
-        <span><i class="red-text text-darken-4 material-icons">access_time</i></span>06 dias restantes
+        <span><i class="red-text text-darken-4 material-icons">access_time</i></span>Em
+        {{desafio.prazo.toDate().toLocaleDateString('pt-BR')}} às
+        {{desafio.prazo.toDate().toLocaleTimeString('pt-BR')}}
       </div>
-      <div class="collapsible-body">
-        <p><b class="blue-text text-darken-3">Demandante:</b> Empresa X</p>
-        <p><b class="blue-text text-darken-3">Área do problema:</b> Área X</p>
-        <p><b class="blue-text text-darken-3">Resumo:</b> Problema X</p>
-      </div>
-    </li>
-    <li>
-      <div class="collapsible-header">
-        Second
-        <div class="row"></div>
-        <span><i class="red-text text-darken-4 material-icons">access_time</i></span>10 dias restantes
-      </div>
-      <div class="collapsible-body">
-        <p><b class="blue-text text-darken-3">Demandante:</b> Empresa X</p>
-        <p><b class="blue-text text-darken-3">Área:</b> Área X</p>
-        <p><b class="blue-text text-darken-3">Problema:</b> Problema X</p>
-      </div>
-    </li>
-    <li>
-      <div class="collapsible-header">
-        Third
-        <div class="row"></div>
-        <span><i class="red-text text-darken-4 material-icons">access_time</i></span>02 dias restantes
-      </div>
-      <div class="collapsible-body">
-        <p><b class="blue-text text-darken-3">Demandante:</b> Empresa X</p>
-        <p><b class="blue-text text-darken-3">Área:</b> Área X</p>
-        <p><b class="blue-text text-darken-3">Problema:</b> Problema X</p>
+      <div style="position: relative" class="collapsible-body">
+        <a (click)="findOne(desafio.id)" *ngIf="desafio.emaildemandante === user.email" class="btn-floating btn-small waves-effect waves-light blue modal-trigger"
+          href="#modalEdit"><i class="material-icons">edit</i></a>
+        <a (click)="findOne(desafio.id)" *ngIf="desafio.emaildemandante === user.email" style="margin-left:20px" class="btn-floating btn-small waves-effect waves-light red modal-trigger"
+          href="#modalDelete"><i class="tiny material-icons">delete</i></a>
+        <a (click)="findOne(desafio.id)" *ngIf="desafio.emaildemandante === user.email" style="margin-left:20px" class="btn-floating btn-small waves-effect waves-light green modal-trigger"
+          href="#modalComplete"><i class="tiny material-icons">done</i></a>
+
+        <p><b class="blue-text text-darken-3">Demandante:</b> {{desafio.demandante}}</p>
+        <p><b class="blue-text text-darken-3">Email do Demandante:</b> {{desafio.emaildemandante}}</p>
+        <p><b class="blue-text text-darken-3">Área do problema:</b> {{desafio.area}}</p>
+        <p><b class="blue-text text-darken-3">Resumo:</b> {{desafio.resumo}}</p>
+
+        <a (click)="getDesafioId(desafio.id)" style="position: absolute; right:10px; bottom:10px;" *ngIf="desafio.emaildemandante !== user.email && user.profile != demandante && !(solucoesArray.includes(desafio.id))"
+          class="waves-effect waves-light btn modal-trigger light-blue darken-2" href="#modalSolver"><i class="material-icons left">send</i>Solucionar</a>
+        <a (click)="findOneSolver(desafio.id)" style="position: absolute; right:10px; bottom:10px;" *ngIf="desafio.emaildemandante !== user.email && user.profile != demandante && solucoesArray.includes(desafio.id)"
+          class="waves-effect waves-light btn modal-trigger yellow darken-3" href="#modalSeeSolver"><i class="material-icons left">remove_red_eye</i>Ver
+          Solução</a>
       </div>
     </li>
   </ul>
+</div>
+
+<span *ngFor="let sol of solucoes | async"></span>
+
+<!-- Modal Create Desafio -->
+<div id="modal1" class="modal">
+  <div class="modal-content">
+    <h4>Criar Novo Desafio</h4>
+    <form id="myForm" (keyup.enter)="createDesafio()" class="col s12">
+      <div class="row">
+        <div class="input-field col s12">
+          <input [(ngModel)]="desafio.nome" id="nome" type="text" class="validate" name="nome" required=""
+            aria-required="true">
+          <label for="nome">Nome do desafio *</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="input-field col s6">
+          <input [(ngModel)]="desafio.area" id="area" type="text" name="area">
+          <label for="area">Área do desafio *</label>
+        </div>
+        <div class="input-field col s3">
+          <input [(ngModel)]="prazo" id="prazo" name="prazo" type="text" class="datepicker validate">
+          <label for="prazo">Prazo do desafio (data) *</label>
+        </div>
+        <div class="input-field col s3">
+          <input [(ngModel)]="hora" id="h" name="h" type="text" class="timepicker validate">
+          <label for="h">Prazo do desafio (hora) *</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="input-field col s12">
+          <textarea [(ngModel)]="desafio.resumo" id="resumo" class="materialize-textarea validate" name="resumo"
+            required="" aria-required="true"></textarea>
+          <label for="resumo">Resumo do desafio *</label>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <a style="margin-right:20px" class="waves-effect waves-light btn red modal-close">Cancelar</a>
+    <a class="waves-effect waves-light btn green" (click)="createDesafio()">Criar</a>
+  </div>
+</div>
+
+<!-- Modal Delete Desafio -->
+<div id="modalDelete" class="modal">
+  <div class="modal-content">
+    <h4>Confirmação</h4>
+    <p>Tem certeza que deseja excluir este desafio? Todos os dados referentes a ele serão perdidos.</p>
+  </div>
+  <div class="modal-footer">
+    <a style="margin-right:20px" class="waves-effect waves-light btn modal-close">Não deletar</a>
+    <a class="waves-effect waves-light btn red" (click)="deleteDesafio()">Deletar</a>
+  </div>
+</div>
+
+<!-- Modal Edit Desafio -->
+<div id="modalEdit" class="modal">
+  <div class="modal-content">
+    <h4>Editar Desafio</h4>
+    <form (keyup.enter)="editDesafio()" class="col s12">
+      <div class="row">
+        <div class="input-field col s12">
+          <span>Nome do desafio *</span>
+          <input [(ngModel)]="found.nome" id="nome" type="text" name="nome" required="" aria-required="true">
+
+        </div>
+      </div>
+      <div class="row">
+        <div class="input-field col s6">
+          <span>Área do desafio *</span>
+          <input [(ngModel)]="found.area" id="area" type="text" name="area">
+        </div>
+        <div class="input-field col s3">
+          <span>Prazo do desafio (data)*</span>
+          <input [(ngModel)]="prazo" id="prazoEdit" name="prazo" type="text" class="datepicker">
+        </div>
+        <div class="input-field col s3">
+          <span>Prazo do desafio (hora)*</span>
+          <input [(ngModel)]="hora" id="hEdit" name="h" type="text" class="timepicker">
+        </div>
+      </div>
+      <div class="row">
+        <div class="input-field col s12">
+          <span>Resumo do desafio (data)*</span>
+          <textarea [(ngModel)]="found.resumo" id="resumo" class="materialize-textarea" name="resumo" required=""
+            aria-required="true"></textarea>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <a style="margin-right:20px" class="waves-effect waves-light btn red modal-close">Cancelar</a>
+    <a class="waves-effect waves-light btn green" (click)="editDesafio()">Editar</a>
+  </div>
+</div>
+
+<!-- Modal Solução -->
+<div id="modalSolver" class="modal">
+  <div class="modal-content">
+    <h4>Enviar Solução</h4>
+    <form id="formSolver" (keyup.enter)="enviarSolver()" class="col s12">
+      <div class="row">
+        <div class="input-field col s12">
+          <textarea [(ngModel)]="solver.resumo" id="resumo" class="materialize-textarea" name="resumo" required=""
+            aria-required="true"></textarea>
+          <label for="resumo">Resumo da solução *</label>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <a style="margin-right:20px" class="waves-effect waves-light btn red modal-close">Cancelar</a>
+    <a class="waves-effect waves-light btn green" (click)="enviarSolver()">Enviar</a>
+  </div>
+</div>
+
+<!-- Modal Ver Solução -->
+<div id="modalSeeSolver" class="modal">
+  <div class="modal-content">
+    <h4>Solução Enviada</h4>
+    <hr>
+    <p><b class="blue-text text-darken-3">Enviado em:</b> {{solverFound.sendAt}}</p>
+    <p>{{solverFound.resumo}}</p>
+  </div>
+  <div class="modal-footer">
+    <a class="waves-effect waves-light btn red modal-close">Sair</a>
+  </div>
 </div>

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from './auth.service';
 
 declare var $: any;
+declare var M: any;
 
 @Component({
   selector: 'app-root',
@@ -10,10 +11,23 @@ declare var $: any;
 })
 export class AppComponent implements OnInit {
   title = 'charset';
+  user: any;
+
+  constructor(public authService: AuthService) {
+
+    if (authService.user) {
+      this.user = JSON.parse(localStorage.getItem('user'));
+      console.log(this.user);
+    }
+  }
 
   ngOnInit() {
+    M.AutoInit();
+    $('.dropdown-trigger').dropdown({
+      coverTrigger: false
+    });
+
     $(document).ready(function () {
-      $('.sidenav').sidenav();
       $(document).scroll(function () {
         var $nav = $(".nav-wrapper");
         $nav.toggleClass('scrolled', $(this).scrollTop() > $nav.height());
@@ -21,8 +35,6 @@ export class AppComponent implements OnInit {
     });
 
   }
-
-  constructor(public authService: AuthService) {}
 
   logout() {
     this.authService.logout();

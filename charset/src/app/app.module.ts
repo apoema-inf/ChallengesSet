@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import {NgPipesModule} from 'ngx-pipes';
 
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
@@ -16,6 +17,7 @@ import { environment } from '../environments/environment';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { AuthService } from './auth.service';
 import { AuthGuard } from './auth-guard.service';
+import { ContaComponent } from './conta/conta.component';
 
 //import { AuthService } from './auth.service';
 const appRoutes: Routes = [
@@ -27,6 +29,11 @@ const appRoutes: Routes = [
   {
     path: 'desafios',
     component: DesafiosComponent,
+    data: { title: 'Desafios' }
+  },
+  {
+    path: 'minha-conta',
+    component: ContaComponent,
     data: { title: 'Desafios' },
     canActivate: [AuthGuard]
   },
@@ -45,7 +52,8 @@ const appRoutes: Routes = [
     component: CadastroComponent,
     data: { title: 'Cadastro' }
   },
-  { path: '',
+  {
+    path: '',
     redirectTo: '/home',
     pathMatch: 'full'
   }
@@ -58,14 +66,14 @@ const appRoutes: Routes = [
     DesafiosComponent,
     SolucionadoresComponent,
     DemandantesComponent,
-    CadastroComponent
+    CadastroComponent,
+    ContaComponent
   ],
   imports: [
     RouterModule.forRoot(
-      appRoutes,
-      { enableTracing: true } // <-- debugging purposes only
-    ),
+      appRoutes),
     BrowserModule,
+    NgPipesModule,
     HttpClientModule,
     FormsModule,
     AngularFireModule.initializeApp(environment.firebase),

@@ -7,3 +7,15 @@
 .font-bold {
     font-weight: 600;
 }
+
+#dropdown1 {
+    width: 200px !important;
+}
+
+#dropdownVer {
+    width: 250px !important;
+}
+
+#dropdown1 li:hover {
+    background-color: #ffee58 !important;
+}
