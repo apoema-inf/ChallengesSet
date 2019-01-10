@@ -1,53 +1,105 @@
 <div class="container">
-  <h4 class="font-bold blue-text text-darken-3">Desafios
-    <hr>
-  </h4>
-  <a class="waves-effect waves-light btn modal-trigger green darken-1" href="#modal1"><i class="material-icons left">add</i>Criar
-    novo</a>
-  &nbsp;
-  <a class='dropdown-trigger btn  light-blue darken-3' href='#' data-target='dropdownVer'><i class="material-icons right">arrow_drop_down</i>
-    Ver</a>
-  <ul id='dropdownVer' class='dropdown-content'>
-    <li> <a (click)="setUserEmail()" class="waves-effect waves-light "><i class="material-icons left">person_pin</i>Meus
-        Desafios</a>
-    </li>
-    <li><a (click)="cleanFilters()" class="waves-effect waves-light "><i class="material-icons left">all_inclusive</i>Todos
-        os Desafios</a></li>
-    <li><a (click)="setSolucoesFilter()" class="waves-effect waves-light "><i class="material-icons left">lightbulb_outline</i>Minhas
-        soluções</a></li>
+  <div style="margin-bottom: 0" class="row">
+    <h4 class="font-bold blue-text text-darken-3">Desafios
+      <hr>
+    </h4>
+  </div>
+  <div class="row valign-wrapper">
+    <div class="col s6 ">
+      <a *ngIf="user.profile != solucionador" class="waves-effect waves-light btn modal-trigger green darken-1" href="#modal1"><i
+          class="material-icons left">add</i>Criar
+        novo</a>
+      &nbsp;
+      <a class='dropdown-trigger btn  light-blue darken-3' href='#' data-target='dropdownVer'><i class="material-icons right">arrow_drop_down</i>
+        Ver</a>
+      <ul id='dropdownVer' class='dropdown-content'>
+        <li *ngIf="user.profile != solucionador"><a (click)="setUserEmail()" class="waves-effect waves-light "><i class="material-icons left">person_pin</i>Meus
+            Desafios</a>
+        </li>
+        <li><a (click)="cleanFilters()" class="waves-effect waves-light "><i class="material-icons left">all_inclusive</i>Todos
+            os Desafios</a></li>
+        <li><a (click)="setStatusConcluido()" class="waves-effect waves-light "><i class="material-icons left">done</i>Desafios
+            Concluídos</a></li>
+        <li *ngIf="user.profile != demandante"><a (click)="setSolucoesFilter()" class="waves-effect waves-light "><i
+              class="material-icons left">lightbulb_outline</i>Minhas
+            soluções</a></li>
+      </ul>
+    </div>
+    <div class="col s6">
+      <form class="col s12">
+        <div class="input-field col s12">
+          <i class="material-icons prefix">search</i>
+          <input [(ngModel)]="search" id="icon_prefix" type="text" class="validate" name="search">
+          <label for="icon_prefix">Pesquise aqui</label>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <ul class="collapsible popout">
+    <ng-container *ngFor="let desafio of desafios | async | filterBy: ['emaildemandante']: userEmail | filterBy: ['status']: statusConcluido
+    | filterBy: ['status', 'nome', 'demandante', 'resumo', 'area']: search">
+      <li *ngIf="!solucoesFilter">
+        <div class="collapsible-header">
+          <i *ngIf="desafio.status == 'concluído'" style="margin-right:20px" class="tiny material-icons green-text">done</i>
+          {{desafio.nome}}
+
+          <div class="row"></div>
+          <span><i class="red-text text-darken-4 material-icons">access_time</i></span>Em
+          {{desafio.prazo.toDate().toLocaleDateString('pt-BR')}} às
+          {{desafio.prazo.toDate().toLocaleTimeString('pt-BR')}}
+        </div>
+        <div style="position: relative" class="collapsible-body">
+          <a style="margin-right:20px" (click)="findOne(desafio.id)" *ngIf="desafio.emaildemandante === user.email && desafio.status != 'concluído'"
+            class="btn-floating btn-small waves-effect waves-light blue modal-trigger" href="#modalEdit"><i class="material-icons">edit</i></a>
+          <a (click)="findOne(desafio.id)" *ngIf="desafio.emaildemandante === user.email" style="margin-right:20px"
+            class="btn-floating btn-small waves-effect waves-light red modal-trigger" href="#modalDelete"><i class="tiny material-icons">delete</i></a>
+          <a (click)="findOne(desafio.id)" *ngIf="desafio.emaildemandante === user.email && desafio.status != 'concluído'"
+            class="btn-floating btn-small waves-effect waves-light green modal-trigger" href="#modalComplete"><i class="tiny material-icons">done</i></a>
+
+          <p><b class="blue-text text-darken-3">Demandante:</b> {{desafio.demandante}}</p>
+          <p><b class="blue-text text-darken-3">Email do Demandante:</b> {{desafio.emaildemandante}}</p>
+          <p><b class="blue-text text-darken-3">Área do problema:</b> {{desafio.area}}</p>
+          <p><b class="blue-text text-darken-3">Resumo:</b> {{desafio.resumo}}</p>
+
+          <a (click)="getDesafioId(desafio.id)" style="position: absolute; right:10px; bottom:10px;" *ngIf="desafio.emaildemandante !== user.email && desafio.status != 'concluído' && user.profile != demandante && !(solucoesArray.includes(desafio.id))"
+            class="waves-effect waves-light btn modal-trigger light-blue darken-2" href="#modalSolver"><i class="material-icons left">send</i>Solucionar</a>
+          <a (click)="findOneSolver(desafio.id)" style="position: absolute; right:10px; bottom:10px;" *ngIf="desafio.emaildemandante !== user.email && user.profile != demandante && solucoesArray.includes(desafio.id)"
+            class="waves-effect waves-light btn modal-trigger yellow darken-3" href="#modalSeeSolver"><i class="material-icons left">remove_red_eye</i>Ver
+            Solução</a>
+        </div>
+      </li>
+    </ng-container>
   </ul>
 
   <ul class="collapsible popout">
-    <li *ngFor="let desafio of desafios | async | filterBy: ['emaildemandante']: userEmail">
-      <div class="collapsible-header">
-        {{desafio.nome}}
+    <ng-container *ngFor="let desafio of desafios | async | filterBy: ['status']: statusConcluido">
+      <li *ngIf="solucoesArray.includes(desafio.id) && solucoesFilter">
+        <div class="collapsible-header">
+          <i *ngIf="desafio.status == 'concluído'" style="margin-right:20px" class="tiny material-icons green-text">done</i>
+          {{desafio.nome}}
 
-        <div class="row"></div>
-        <span><i class="red-text text-darken-4 material-icons">access_time</i></span>Em
-        {{desafio.prazo.toDate().toLocaleDateString('pt-BR')}} às
-        {{desafio.prazo.toDate().toLocaleTimeString('pt-BR')}}
-      </div>
-      <div style="position: relative" class="collapsible-body">
-        <a (click)="findOne(desafio.id)" *ngIf="desafio.emaildemandante === user.email" class="btn-floating btn-small waves-effect waves-light blue modal-trigger"
-          href="#modalEdit"><i class="material-icons">edit</i></a>
-        <a (click)="findOne(desafio.id)" *ngIf="desafio.emaildemandante === user.email" style="margin-left:20px" class="btn-floating btn-small waves-effect waves-light red modal-trigger"
-          href="#modalDelete"><i class="tiny material-icons">delete</i></a>
-        <a (click)="findOne(desafio.id)" *ngIf="desafio.emaildemandante === user.email" style="margin-left:20px" class="btn-floating btn-small waves-effect waves-light green modal-trigger"
-          href="#modalComplete"><i class="tiny material-icons">done</i></a>
+          <div class="row"></div>
+          <span><i class="red-text text-darken-4 material-icons">access_time</i></span>Em
+          {{desafio.prazo.toDate().toLocaleDateString('pt-BR')}} às
+          {{desafio.prazo.toDate().toLocaleTimeString('pt-BR')}}
+        </div>
+        <div style="position: relative" class="collapsible-body">
 
-        <p><b class="blue-text text-darken-3">Demandante:</b> {{desafio.demandante}}</p>
-        <p><b class="blue-text text-darken-3">Email do Demandante:</b> {{desafio.emaildemandante}}</p>
-        <p><b class="blue-text text-darken-3">Área do problema:</b> {{desafio.area}}</p>
-        <p><b class="blue-text text-darken-3">Resumo:</b> {{desafio.resumo}}</p>
+          <p><b class="blue-text text-darken-3">Demandante:</b> {{desafio.demandante}}</p>
+          <p><b class="blue-text text-darken-3">Email do Demandante:</b> {{desafio.emaildemandante}}</p>
+          <p><b class="blue-text text-darken-3">Área do problema:</b> {{desafio.area}}</p>
+          <p><b class="blue-text text-darken-3">Resumo:</b> {{desafio.resumo}}</p>
 
-        <a (click)="getDesafioId(desafio.id)" style="position: absolute; right:10px; bottom:10px;" *ngIf="desafio.emaildemandante !== user.email && user.profile != demandante && !(solucoesArray.includes(desafio.id))"
-          class="waves-effect waves-light btn modal-trigger light-blue darken-2" href="#modalSolver"><i class="material-icons left">send</i>Solucionar</a>
-        <a (click)="findOneSolver(desafio.id)" style="position: absolute; right:10px; bottom:10px;" *ngIf="desafio.emaildemandante !== user.email && user.profile != demandante && solucoesArray.includes(desafio.id)"
-          class="waves-effect waves-light btn modal-trigger yellow darken-3" href="#modalSeeSolver"><i class="material-icons left">remove_red_eye</i>Ver
-          Solução</a>
-      </div>
-    </li>
+          <a (click)="findOneSolver(desafio.id)" style="position: absolute; right:10px; bottom:10px;" *ngIf="desafio.emaildemandante !== user.email"
+            class="waves-effect waves-light btn modal-trigger yellow darken-3" href="#modalSeeSolver"><i class="material-icons left">remove_red_eye</i>Ver
+            Solução</a>
+        </div>
+      </li>
+    </ng-container>
   </ul>
+
+
 </div>
 
 <span *ngFor="let sol of solucoes | async"></span>
@@ -176,5 +228,17 @@
   </div>
   <div class="modal-footer">
     <a class="waves-effect waves-light btn red modal-close">Sair</a>
+  </div>
+</div>
+
+<!-- Modal Desafio Complete -->
+<div id="modalComplete" class="modal">
+  <div class="modal-content">
+    <h4>Confirmação</h4>
+    <p>Tem certeza que deseja marcar este desafio como concluído? Não será mais possível receber soluções para ele.</p>
+  </div>
+  <div class="modal-footer">
+    <a style="margin-right:20px" class="waves-effect waves-light btn red modal-close">Não concluir</a>
+    <a class="waves-effect waves-light btn green" (click)="completeDesafio()">Concluir</a>
   </div>
 </div>

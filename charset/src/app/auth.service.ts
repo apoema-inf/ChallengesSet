@@ -52,12 +52,10 @@ export class AuthService {
           .then((value) => {
             that.db.collection('users').doc(value.docs[0].id).ref.get().then(documentSnapshot => {
               localStorage.setItem('user', JSON.stringify(documentSnapshot.data()));
-              
+              M.toast({ html: 'Usuário autenticado', classes: 'rounded' });
+              that.router.navigate(['/desafios']);
             })
-          });
-
-        M.toast({ html: 'Usuário autenticado', classes: 'rounded' });
-        this.router.navigate(['/desafios']);
+          })
       })
       .catch(err => {
         M.toast({ html: err.message, classes: 'rounded' });

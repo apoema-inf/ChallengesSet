@@ -6,4 +6,5 @@ export class Desafio {
     resumo: string;
     area: string;
     emaildemandante: string;
+    status: string;
 }

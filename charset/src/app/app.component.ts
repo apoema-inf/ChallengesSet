@@ -27,13 +27,6 @@ export class AppComponent implements OnInit {
       coverTrigger: false
     });
 
-    $(document).ready(function () {
-      $(document).scroll(function () {
-        var $nav = $(".nav-wrapper");
-        $nav.toggleClass('scrolled', $(this).scrollTop() > $nav.height());
-      });
-    });
-
   }
 
   logout() {

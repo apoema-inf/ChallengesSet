@@ -10,16 +10,6 @@ nav ul a:hover {
     color: #263238;
 }
 
-.scrolled {
-    background-color: #fff !important;
-    transition: background-color 250ms linear;
-}
-
-.scrolled li a {
-    color: #01579b;
-}
-
 .color {
     background-color: #01579b;
-    transition: background-color 250ms linear;
 }

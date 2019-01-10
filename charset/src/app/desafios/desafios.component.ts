@@ -27,7 +27,9 @@ export class DesafiosComponent implements OnInit {
   solver: Solver = new Solver();
   solverFound: Solver = new Solver();
   solucoesArray: string[] = [''];
-  solucoesFilter: string = null;
+  solucoesFilter: boolean = false;
+  statusConcluido: string = '';
+  search: string = '';
 
   constructor(private db: AngularFirestore) {
     var that = this;
@@ -60,8 +62,8 @@ export class DesafiosComponent implements OnInit {
 
             data.id = a.payload.doc.id;
 
-            
-            if(data.emailsolver == this.user.email)
+
+            if (data.emailsolver == this.user.email)
               that.solucoesArray.push(data.idDesafio);
 
             return data;
@@ -74,6 +76,9 @@ export class DesafiosComponent implements OnInit {
   ngOnInit() {
     M.AutoInit();
     $('#modalDelete').modal({
+      opacity: 0.1
+    });
+    $('#modalComplete').modal({
       opacity: 0.1
     });
     $('.datepicker').datepicker({
@@ -137,18 +142,13 @@ export class DesafiosComponent implements OnInit {
   }
 
   setSolucoesFilter() {
-    this.cleanFilters();
-    this.solucoesArray.forEach(element => {
-      if (element != (null || '' || undefined)) {
-        this.solucoesFilter += element;
-      }
-    });
-    console.log(this.solucoesFilter);
+    this.solucoesFilter = true;
   }
 
   cleanFilters() {
     this.userEmail = '';
-    this.solucoesFilter = null;
+    this.solucoesFilter = false;
+    this.statusConcluido = '';
   }
 
   createDesafio() {
@@ -177,7 +177,8 @@ export class DesafiosComponent implements OnInit {
       prazo: dateObject,
       resumo: this.desafio.resumo,
       area: this.desafio.area,
-      emaildemandante: this.user.email
+      emaildemandante: this.user.email,
+      status: ''
     })
       .then(function () {
         $('#modal1').modal('close');
@@ -203,6 +204,7 @@ export class DesafiosComponent implements OnInit {
           that.prazo = doc.data().prazo.toDate().toLocaleDateString('pt-BR');
           that.hora = doc.data().prazo.toDate().toLocaleTimeString('pt-BR');
           that.found.id = doc.id;
+          that.found.status = doc.data().status;
         } else {
           // doc.data() will be undefined in this case
           console.log("No such document!");
@@ -263,13 +265,14 @@ export class DesafiosComponent implements OnInit {
       return;
     }
 
-    this.db.collection("soluções").add({
-      solver: this.user.nome,
-      emailsolver: this.user.email,
-      resumo: this.solver.resumo,
-      idDesafio: this.solver.idDesafio,
-      sendAt: firebase.firestore.FieldValue.serverTimestamp()
-    })
+    this.db.collection("soluções")
+      .add({
+        solver: this.user.nome,
+        emailsolver: this.user.email,
+        resumo: this.solver.resumo,
+        idDesafio: this.solver.idDesafio,
+        sendAt: firebase.firestore.FieldValue.serverTimestamp()
+      })
       .then(function () {
         $('#modalSolver').modal('close');
         M.toast({ html: 'Solução enviada com sucesso!', classes: 'rounded' });
@@ -296,5 +299,25 @@ export class DesafiosComponent implements OnInit {
       }).catch(function (error) {
         console.log("Error getting document:", error);
       });
+  }
+
+  completeDesafio() {
+    this.db.collection("desafios").doc(this.found.id)
+      .update({
+        status: 'concluído'
+      })
+      .then(function () {
+        $('#modalComplete').modal('close');
+        M.toast({ html: 'Desafio concluído com sucesso!', classes: 'rounded' });
+      })
+      .catch(function () {
+        // The document probably doesn't exist.
+        M.toast({ html: 'Não foi possível concluir o desafio', classes: 'rounded' });
+      });
+
+  }
+
+  setStatusConcluido() {
+    this.statusConcluido = 'concluído';
   }
 }
