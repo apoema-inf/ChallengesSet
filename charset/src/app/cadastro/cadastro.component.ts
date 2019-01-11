@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../auth.service';
 import { User } from '../models/user.model';
+import { Router } from '@angular/router';
 
 declare var $: any;
 declare var M:any;
@@ -14,7 +15,11 @@ export class CadastroComponent implements OnInit {
 
   user: User = new User();
 
-  constructor(public authService: AuthService) { }
+  constructor(public authService: AuthService, public router: Router) {
+    if(JSON.parse(localStorage.getItem('user'))) {
+      router.navigate(['home']);
+    }
+  }
   
   ngOnInit() {
     $('select').formSelect();

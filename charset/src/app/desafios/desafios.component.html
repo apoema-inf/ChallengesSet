@@ -6,21 +6,21 @@
   </div>
   <div class="row valign-wrapper">
     <div class="col s6 ">
-      <a *ngIf="user.profile != solucionador" class="waves-effect waves-light btn modal-trigger green darken-1" href="#modal1"><i
+      <a *ngIf="user.profile !== 'Solucionador'" class="waves-effect waves-light btn modal-trigger green darken-1" href="#modal1"><i
           class="material-icons left">add</i>Criar
         novo</a>
       &nbsp;
       <a class='dropdown-trigger btn  light-blue darken-3' href='#' data-target='dropdownVer'><i class="material-icons right">arrow_drop_down</i>
         Ver</a>
       <ul id='dropdownVer' class='dropdown-content'>
-        <li *ngIf="user.profile != solucionador"><a (click)="setUserEmail()" class="waves-effect waves-light "><i class="material-icons left">person_pin</i>Meus
+        <li *ngIf="user.profile !== 'Solucionador'"><a (click)="setUserEmail()" class="waves-effect waves-light "><i class="material-icons left">person_pin</i>Meus
             Desafios</a>
         </li>
         <li><a (click)="cleanFilters()" class="waves-effect waves-light "><i class="material-icons left">all_inclusive</i>Todos
             os Desafios</a></li>
         <li><a (click)="setStatusConcluido()" class="waves-effect waves-light "><i class="material-icons left">done</i>Desafios
             Concluídos</a></li>
-        <li *ngIf="user.profile != demandante"><a (click)="setSolucoesFilter()" class="waves-effect waves-light "><i
+        <li *ngIf="user.profile != 'Demandante'"><a (click)="setSolucoesFilter()" class="waves-effect waves-light "><i
               class="material-icons left">lightbulb_outline</i>Minhas
             soluções</a></li>
       </ul>
@@ -62,9 +62,9 @@
           <p><b class="blue-text text-darken-3">Área do problema:</b> {{desafio.area}}</p>
           <p><b class="blue-text text-darken-3">Resumo:</b> {{desafio.resumo}}</p>
 
-          <a (click)="getDesafioId(desafio.id)" style="position: absolute; right:10px; bottom:10px;" *ngIf="desafio.emaildemandante !== user.email && desafio.status != 'concluído' && user.profile != demandante && !(solucoesArray.includes(desafio.id))"
+          <a (click)="getDesafioId(desafio.id)" style="position: absolute; right:10px; bottom:10px;" *ngIf="desafio.emaildemandante !== user.email && desafio.status != 'concluído' && user.profile != 'Demandante' && !(solucoesArray.includes(desafio.id))"
             class="waves-effect waves-light btn modal-trigger light-blue darken-2" href="#modalSolver"><i class="material-icons left">send</i>Solucionar</a>
-          <a (click)="findOneSolver(desafio.id)" style="position: absolute; right:10px; bottom:10px;" *ngIf="desafio.emaildemandante !== user.email && user.profile != demandante && solucoesArray.includes(desafio.id)"
+          <a (click)="findOneSolver(desafio.id)" style="position: absolute; right:10px; bottom:10px;" *ngIf="desafio.emaildemandante !== user.email && user.profile != 'Demandante' && solucoesArray.includes(desafio.id)"
             class="waves-effect waves-light btn modal-trigger yellow darken-3" href="#modalSeeSolver"><i class="material-icons left">remove_red_eye</i>Ver Sua
             Solução</a>
 

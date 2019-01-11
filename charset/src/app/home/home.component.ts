@@ -13,8 +13,12 @@ export class HomeComponent {
 
   email: string;
   password: string;
+  user: any;
 
-  constructor(public authService: AuthService) { }
+  constructor(public authService: AuthService) {
+    this.user = JSON.parse(localStorage.getItem('user'));
+
+  }
 
   login() {
     if (this.email == (null || '' || undefined) ||
