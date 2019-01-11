@@ -87,4 +87,13 @@ export class AuthService {
       });
   }
 
+  forgotPassword(email) {
+
+    this.firebaseAuth.auth.sendPasswordResetEmail(email).then(function () {
+      M.toast({ html: 'Você receberá um email para a redefinição de sua senha em ' + email, classes: 'rounded' });
+    }).catch(function (error) {
+      M.toast({ html: error, classes: 'rounded' });
+    });
+  }
+
 }
