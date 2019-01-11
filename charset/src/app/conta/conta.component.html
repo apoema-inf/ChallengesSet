@@ -1,3 +1,17 @@
-<p>
-  conta works!
-</p>
+<div class="container">
+  <h5 class="blue-grey-text text-darken-1"><b>Seu Perfil</b>
+    <hr>
+  </h5>
+  <div class="row">
+    <p><b class="blue-text text-darken-3">Nome:</b> {{user.nome}} <a class="btn-floating btn-small waves-effect waves-light blue"><i
+          class="material-icons">edit</i></a>
+    </p>
+
+    <p><b class="blue-text text-darken-3">Email:</b> {{user.email}} <a class="btn-floating btn-small waves-effect waves-light blue"><i
+          class="material-icons">edit</i></a></p>
+    <p><b class="blue-text text-darken-3">Profile:</b> {{user.profile}} <a class="btn-floating btn-small waves-effect waves-light blue"><i
+          class="material-icons">edit</i></a></p>
+    <a (click)="redefinirSenha()" class="waves-effect waves-light btn-small yellow darken-3">Redefinir Senha</a>
+
+  </div>
+</div>
