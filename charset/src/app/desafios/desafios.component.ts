@@ -32,6 +32,7 @@ export class DesafiosComponent implements OnInit {
   search: string = '';
 
   constructor(private db: AngularFirestore) {
+
     var that = this;
     this.user = JSON.parse(localStorage.getItem('user'));
     this.desafios = db.collection('desafios').snapshotChanges().pipe(map(

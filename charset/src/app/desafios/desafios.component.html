@@ -40,8 +40,8 @@
     <ng-container *ngFor="let desafio of desafios | async | filterBy: ['emaildemandante']: userEmail | filterBy: ['status']: statusConcluido
     | filterBy: ['status', 'nome', 'demandante', 'resumo', 'area']: search">
       <li *ngIf="!solucoesFilter">
-        <div (click)="reInitMaterialize()" class="collapsible-header">
-          <i *ngIf="desafio.status == 'concluído'" style="margin-right:20px" class="tiny material-icons green-text">done</i>
+        <div [ngClass]="{'green lighten-1 white-text': desafio.status == 'concluído'}" (click)="reInitMaterialize()" class="collapsible-header">
+          <i *ngIf="desafio.status == 'concluído'" style="margin-right:20px" class="tiny material-icons white-text">done</i>
           {{desafio.nome}}
 
           <div class="row"></div>
