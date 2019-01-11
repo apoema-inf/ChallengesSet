@@ -9,12 +9,10 @@
           <li routerLinkActive="active"><a routerLink="/desafios"><b>Desafios</b></a></li>
           <li routerLinkActive="active"><a routerLink="/solucionadores"><b>Solucionadores</b></a></li>
           <li routerLinkActive="active"><a routerLink="/demandantes"><b>Demandantes</b></a></li>
-          <li><i class='material-icons dropdown-trigger btn' data-target='dropdown1'>account_circle</i></li>
+          <li (click)="reInitMaterialize()" *ngIf="authService.user | async"><i id="dropdown-user" class='material-icons dropdown-trigger btn' data-target='dropdown1'>account_circle</i></li>
 
           <ul id='dropdown1' class='teal accent-4 dropdown-content'>
             <li><a routerLink="/minha-conta">Minha conta</a></li>
-            <li><a routerLink="/minhas-soluções">Minhas soluções</a></li>
-            <li><a routerLink="/meus-desafios">Meus desafios</a></li>
             <li class="divider" tabindex="-1"></li>
             <li><a (click)="logout()"><b>Log out</b></a></li>
           </ul>

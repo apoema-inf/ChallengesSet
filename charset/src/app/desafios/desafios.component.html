@@ -40,7 +40,7 @@
     <ng-container *ngFor="let desafio of desafios | async | filterBy: ['emaildemandante']: userEmail | filterBy: ['status']: statusConcluido
     | filterBy: ['status', 'nome', 'demandante', 'resumo', 'area']: search">
       <li *ngIf="!solucoesFilter">
-        <div class="collapsible-header">
+        <div (click)="reInitMaterialize()" class="collapsible-header">
           <i *ngIf="desafio.status == 'concluído'" style="margin-right:20px" class="tiny material-icons green-text">done</i>
           {{desafio.nome}}
 
@@ -65,8 +65,24 @@
           <a (click)="getDesafioId(desafio.id)" style="position: absolute; right:10px; bottom:10px;" *ngIf="desafio.emaildemandante !== user.email && desafio.status != 'concluído' && user.profile != demandante && !(solucoesArray.includes(desafio.id))"
             class="waves-effect waves-light btn modal-trigger light-blue darken-2" href="#modalSolver"><i class="material-icons left">send</i>Solucionar</a>
           <a (click)="findOneSolver(desafio.id)" style="position: absolute; right:10px; bottom:10px;" *ngIf="desafio.emaildemandante !== user.email && user.profile != demandante && solucoesArray.includes(desafio.id)"
-            class="waves-effect waves-light btn modal-trigger yellow darken-3" href="#modalSeeSolver"><i class="material-icons left">remove_red_eye</i>Ver
+            class="waves-effect waves-light btn modal-trigger yellow darken-3" href="#modalSeeSolver"><i class="material-icons left">remove_red_eye</i>Ver Sua
             Solução</a>
+
+          <ul class="collapsible">
+            <ng-container *ngFor="let solucao of solucoes | async">
+              <li *ngIf="desafio.id == solucao.idDesafio && desafio.emaildemandante == user.email">
+                <div class="collapsible-header amber lighten-2"><i class="material-icons">lightbulb_outline</i>Solução do
+                  {{solucao.solver}} - {{solucao.emailsolver}}</div>
+                <div class="collapsible-body">
+                  <p><b class="blue-text text-darken-3">Enviado em:</b>
+                    {{solucao.sendAt.toDate().toLocaleDateString('pt-BR')}} às
+                    {{solucao.sendAt.toDate().toLocaleTimeString('pt-BR')}}</p>
+                  {{solucao.resumo}}
+                </div>
+              </li>
+            </ng-container>
+          </ul>
+
         </div>
       </li>
     </ng-container>

@@ -54,6 +54,7 @@ export class AuthService {
               localStorage.setItem('user', JSON.stringify(documentSnapshot.data()));
               M.toast({ html: 'Usuário autenticado', classes: 'rounded' });
               that.router.navigate(['/desafios']);
+              window.location.reload();
             })
           })
       })

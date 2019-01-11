@@ -14,7 +14,6 @@ export class AppComponent implements OnInit {
   user: any;
 
   constructor(public authService: AuthService) {
-
     if (authService.user) {
       this.user = JSON.parse(localStorage.getItem('user'));
       console.log(this.user);
@@ -23,10 +22,11 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     M.AutoInit();
-    $('.dropdown-trigger').dropdown({
-      coverTrigger: false
-    });
+  }
 
+  reInitMaterialize() {
+    M.AutoInit();
+    $('#dropdown-user').dropdown('open');
   }
 
   logout() {

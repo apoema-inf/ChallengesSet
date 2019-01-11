@@ -142,6 +142,7 @@ export class DesafiosComponent implements OnInit {
   }
 
   setSolucoesFilter() {
+    this.cleanFilters();
     this.solucoesFilter = true;
   }
 
@@ -318,6 +319,12 @@ export class DesafiosComponent implements OnInit {
   }
 
   setStatusConcluido() {
+    this.cleanFilters();
     this.statusConcluido = 'concluído';
   }
+
+  reInitMaterialize() {
+    M.AutoInit();
+  }
 }
+
