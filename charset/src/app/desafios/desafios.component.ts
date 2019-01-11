@@ -50,7 +50,7 @@ export class DesafiosComponent implements OnInit {
           });
       }));
 
-    this.solucoes = db.collection('soluções').snapshotChanges().pipe(map(
+    this.solucoes = db.collection('solucoes').snapshotChanges().pipe(map(
 
       changes => {
 
@@ -266,7 +266,7 @@ export class DesafiosComponent implements OnInit {
       return;
     }
 
-    this.db.collection("soluções")
+    this.db.collection("solucoes")
       .add({
         solver: this.user.nome,
         emailsolver: this.user.email,
@@ -286,7 +286,7 @@ export class DesafiosComponent implements OnInit {
 
   findOneSolver(desafioId) {
     var that = this;
-    this.db.collection("soluções").ref.where("idDesafio", "==", desafioId)
+    this.db.collection("solucoes").ref.where("idDesafio", "==", desafioId)
       .get().then(function (querySnapshot) {
         querySnapshot.forEach(function (doc) {
           that.solverFound.resumo = doc.data().resumo;

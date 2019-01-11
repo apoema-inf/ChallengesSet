@@ -41,6 +41,20 @@ export class AuthService {
   }
 
   login(email: string, password: string) {
+    firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION)
+      .then(function () {
+        // Existing and future Auth states are now persisted in the current
+        // session only. Closing the window would clear any existing state even
+        // if a user forgets to sign out.
+        // ...
+        // New sign-in will be persisted with session persistence.
+        return firebase.auth().signInWithEmailAndPassword(email, password);
+      })
+      .catch(function (error) {
+        // Handle Errors here.
+        var errorCode = error.code;
+        var errorMessage = error.message;
+      });
     var that = this;
     this.firebaseAuth
       .auth
@@ -53,8 +67,7 @@ export class AuthService {
             that.db.collection('users').doc(value.docs[0].id).ref.get().then(documentSnapshot => {
               localStorage.setItem('user', JSON.stringify(documentSnapshot.data()));
               M.toast({ html: 'Usuário autenticado', classes: 'rounded' });
-              that.router.navigate(['/desafios']);
-              window.location.reload();
+              window.location.replace('/desafios');
             })
           })
       })
@@ -68,9 +81,9 @@ export class AuthService {
     this.firebaseAuth
       .auth
       .signOut().then(function () {
-        that.router.navigate(['/home']);
         M.toast({ html: 'Usuário deslogado', classes: 'rounded' });
         localStorage.clear();
+        window.location.replace('/home');
       });
   }
 

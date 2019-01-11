@@ -1,0 +1,55 @@
+<div class="container">
+  <div style="margin-bottom: 0" class="row">
+    <h4 class="font-bold blue-text text-darken-3">Desafios
+      <hr>
+    </h4>
+  </div>
+  <div class="row valign-wrapper">
+    <div class="col s6 ">
+      <a class='dropdown-trigger btn  light-blue darken-3' href='#' data-target='dropdownVer'><i class="material-icons right">arrow_drop_down</i>
+        Ver</a>
+      <ul id='dropdownVer' class='dropdown-content'>
+        <li><a (click)="cleanFilters()" class="waves-effect waves-light "><i class="material-icons left">all_inclusive</i>Todos
+            os Desafios</a></li>
+        <li><a (click)="setStatusConcluido()" class="waves-effect waves-light "><i class="material-icons left">done</i>Desafios
+            Concluídos</a></li>
+      </ul>
+    </div>
+    <div class="col s6">
+      <form class="col s12">
+        <div class="input-field col s12">
+          <i class="material-icons prefix">search</i>
+          <input [(ngModel)]="search" id="icon_prefix" type="text" class="validate" name="search">
+          <label for="icon_prefix">Pesquise aqui</label>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <ul class="collapsible popout">
+    <ng-container *ngFor="let desafio of desafios | async | filterBy: ['status']: statusConcluido
+      | filterBy: ['status', 'nome', 'demandante', 'resumo', 'area']: search">
+      <li *ngIf="!solucoesFilter">
+        <div (click)="reInitMaterialize()" class="collapsible-header">
+          <i *ngIf="desafio.status == 'concluído'" style="margin-right:20px" class="tiny material-icons green-text">done</i>
+          {{desafio.nome}}
+
+          <div class="row"></div>
+          <span><i class="red-text text-darken-4 material-icons">access_time</i></span>Em
+          {{desafio.prazo.toDate().toLocaleDateString('pt-BR')}} às
+          {{desafio.prazo.toDate().toLocaleTimeString('pt-BR')}}
+        </div>
+        <div style="position: relative" class="collapsible-body">
+
+          <p><b class="blue-text text-darken-3">Demandante:</b> {{desafio.demandante}}</p>
+          <p><b class="blue-text text-darken-3">Email do Demandante:</b> {{desafio.emaildemandante}}</p>
+          <p><b class="blue-text text-darken-3">Área do problema:</b> {{desafio.area}}</p>
+          <p><b class="blue-text text-darken-3">Resumo:</b> {{desafio.resumo}}</p>
+
+        </div>
+      </li>
+    </ng-container>
+  </ul>
+
+
+</div>

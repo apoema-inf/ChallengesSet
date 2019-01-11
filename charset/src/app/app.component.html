@@ -6,10 +6,14 @@
         <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">dehaze</i></a>
         <ul class="right hide-on-med-and-down">
           <li routerLinkActive="active"><a routerLink="/home"><b>Home</b></a></li>
-          <li routerLinkActive="active"><a routerLink="/desafios"><b>Desafios</b></a></li>
+          <li *ngIf="user; else semUser" routerLinkActive="active"><a routerLink="/desafios"><b>Desafios</b></a></li>
+          <ng-template #semUser>
+            <li routerLinkActive="active"><a routerLink="/desafios-comum"><b>Desafios</b></a></li>
+          </ng-template>
           <li routerLinkActive="active"><a routerLink="/solucionadores"><b>Solucionadores</b></a></li>
           <li routerLinkActive="active"><a routerLink="/demandantes"><b>Demandantes</b></a></li>
-          <li (click)="reInitMaterialize()" *ngIf="authService.user | async"><i id="dropdown-user" class='material-icons dropdown-trigger btn' data-target='dropdown1'>account_circle</i></li>
+          <li (click)="reInitMaterialize()" *ngIf="authService.user | async"><i id="dropdown-user" class='material-icons dropdown-trigger btn'
+              data-target='dropdown1'>account_circle</i></li>
 
           <ul id='dropdown1' class='teal accent-4 dropdown-content'>
             <li><a routerLink="/minha-conta">Minha conta</a></li>

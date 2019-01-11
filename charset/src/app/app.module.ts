@@ -18,6 +18,7 @@ import { AngularFireAuthModule } from 'angularfire2/auth';
 import { AuthService } from './auth.service';
 import { AuthGuard } from './auth-guard.service';
 import { ContaComponent } from './conta/conta.component';
+import { DesafiosComumComponent } from './desafios-comum/desafios-comum.component';
 
 //import { AuthService } from './auth.service';
 const appRoutes: Routes = [
@@ -27,14 +28,18 @@ const appRoutes: Routes = [
     data: { title: 'Home' }
   },
   {
+    path: 'desafios-comum',
+    component: DesafiosComumComponent
+  },
+  {
     path: 'desafios',
     component: DesafiosComponent,
-    data: { title: 'Desafios' }
+    data: { title: 'Desafios' },
+    canActivate: [AuthGuard]
   },
   {
     path: 'minha-conta',
     component: ContaComponent,
-    data: { title: 'Desafios' },
     canActivate: [AuthGuard]
   },
   {
@@ -67,7 +72,8 @@ const appRoutes: Routes = [
     SolucionadoresComponent,
     DemandantesComponent,
     CadastroComponent,
-    ContaComponent
+    ContaComponent,
+    DesafiosComumComponent
   ],
   imports: [
     RouterModule.forRoot(
