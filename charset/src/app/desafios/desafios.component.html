@@ -6,23 +6,40 @@
   </div>
   <div class="row valign-wrapper">
     <div class="col s6 ">
-      <a *ngIf="user.profile !== 'Solucionador'" class="waves-effect waves-light btn modal-trigger green darken-1" href="#modal1"><i
-          class="material-icons left">add</i>Criar
+      <a (click)="reInitMaterialize()" *ngIf="user.profile !== 'Solucionador'" class="waves-effect waves-light btn modal-trigger green darken-1"
+        href="#modal1"><i class="material-icons left">add</i>Criar
         novo</a>
+      &nbsp;
+      <a class='dropdown-trigger btn  light-blue darken-3' href='#' data-target='dropdownArea'><i class="material-icons right">arrow_drop_down</i>
+        Área</a>
       &nbsp;
       <a class='dropdown-trigger btn  light-blue darken-3' href='#' data-target='dropdownVer'><i class="material-icons right">arrow_drop_down</i>
         Ver</a>
+
+
       <ul id='dropdownVer' class='dropdown-content'>
-        <li *ngIf="user.profile !== 'Solucionador'"><a (click)="setUserEmail()" class="waves-effect waves-light "><i class="material-icons left">person_pin</i>Meus
+        <li *ngIf="user.profile !== 'Solucionador'"><a (click)="setUserEmail()" class="waves-effect waves-light "><i
+              class="material-icons left">person_pin</i>Meus
             Desafios</a>
         </li>
         <li><a (click)="cleanFilters()" class="waves-effect waves-light "><i class="material-icons left">all_inclusive</i>Todos
             os Desafios</a></li>
-        <li><a (click)="setStatusConcluido()" class="waves-effect waves-light "><i class="material-icons left">done</i>Desafios
+        <li><a (click)="setStatus('concluído')" class="waves-effect waves-light "><i class="material-icons left">done</i>Desafios
             Concluídos</a></li>
+        <li><a (click)="setStatus('submissão')" class="waves-effect waves-light "><i class="material-icons left">archive</i>Desafios
+            Submissão</a></li>
+        <li><a (click)="setStatus('release')" class="waves-effect waves-light "><i class="material-icons left">near_me</i>Desafios
+            Release</a></li>
+        <li><a (click)="setRemunerado()" class="waves-effect waves-light "><i class="material-icons left">attach_money</i>Desafios
+            Remunerados</a></li>
         <li *ngIf="user.profile != 'Demandante'"><a (click)="setSolucoesFilter()" class="waves-effect waves-light "><i
               class="material-icons left">lightbulb_outline</i>Minhas
             soluções</a></li>
+      </ul>
+      <ul id='dropdownArea' class='dropdown-content'>
+        <li *ngFor="let area of areaoptions | async"><a (click)="setArea(area.nome)" class="waves-effect waves-light ">
+            {{area.nome}}</a>
+        </li>
       </ul>
     </div>
     <div class="col s6">
@@ -37,15 +54,17 @@
   </div>
 
   <ul class="collapsible popout">
-    <ng-container *ngFor="let desafio of desafios | async | filterBy: ['emaildemandante']: userEmail | filterBy: ['status']: statusConcluido
-    | filterBy: ['status', 'nome', 'demandante', 'resumo', 'area']: search">
+    <ng-container *ngFor="let desafio of desafios | async | filterBy: ['emaildemandante']: userEmail | filterBy: ['status']: status
+    | filterBy: ['status', 'nome', 'demandante', 'resumo', 'area']: search | filterBy: ['area']: area | filterBy: ['remunerado']: remunerado">
       <li *ngIf="!solucoesFilter">
-        <div [ngClass]="{'green lighten-1 white-text': desafio.status == 'concluído'}" (click)="reInitMaterialize()" class="collapsible-header">
+        <div [ngClass]="{'green lighten-1 white-text': desafio.status == 'concluído'}" (click)="reInitMaterialize()"
+          class="collapsible-header">
           <i *ngIf="desafio.status == 'concluído'" style="margin-right:20px" class="tiny material-icons white-text">done</i>
           {{desafio.nome}}
 
           <div class="row"></div>
-          <span><i class="red-text text-darken-4 material-icons">access_time</i></span>Em
+          <span><i [ngClass]="{'white-text': desafio.status == 'concluído'}" class="red-text material-icons">access_time</i></span>Prazo
+          para Submissão
           {{desafio.prazo.toDate().toLocaleDateString('pt-BR')}} às
           {{desafio.prazo.toDate().toLocaleTimeString('pt-BR')}}
         </div>
@@ -61,17 +80,20 @@
           <p><b class="blue-text text-darken-3">Email do Demandante:</b> {{desafio.emaildemandante}}</p>
           <p><b class="blue-text text-darken-3">Área do problema:</b> {{desafio.area}}</p>
           <p><b class="blue-text text-darken-3">Resumo:</b> {{desafio.resumo}}</p>
+          <p><b class="blue-text text-darken-3">Remuneração:</b> {{desafio.remunerado}}</p>
 
           <a (click)="getDesafioId(desafio.id)" style="position: absolute; right:10px; bottom:10px;" *ngIf="desafio.emaildemandante !== user.email && desafio.status != 'concluído' && user.profile != 'Demandante' && !(solucoesArray.includes(desafio.id))"
             class="waves-effect waves-light btn modal-trigger light-blue darken-2" href="#modalSolver"><i class="material-icons left">send</i>Solucionar</a>
           <a (click)="findOneSolver(desafio.id)" style="position: absolute; right:10px; bottom:10px;" *ngIf="desafio.emaildemandante !== user.email && user.profile != 'Demandante' && solucoesArray.includes(desafio.id)"
-            class="waves-effect waves-light btn modal-trigger yellow darken-3" href="#modalSeeSolver"><i class="material-icons left">remove_red_eye</i>Ver Sua
+            class="waves-effect waves-light btn modal-trigger yellow darken-3" href="#modalSeeSolver"><i class="material-icons left">remove_red_eye</i>Ver
+            Sua
             Solução</a>
 
           <ul class="collapsible">
             <ng-container *ngFor="let solucao of solucoes | async">
               <li *ngIf="desafio.id == solucao.idDesafio && desafio.emaildemandante == user.email">
-                <div class="collapsible-header amber lighten-2"><i class="material-icons">lightbulb_outline</i>Solução do
+                <div class="collapsible-header amber lighten-2"><i class="material-icons">lightbulb_outline</i>Solução
+                  do
                   {{solucao.solver}} - {{solucao.emailsolver}}</div>
                 <div class="collapsible-body">
                   <p><b class="blue-text text-darken-3">Enviado em:</b>
@@ -132,8 +154,13 @@
       </div>
       <div class="row">
         <div class="input-field col s6">
-          <input [(ngModel)]="desafio.area" id="area" type="text" name="area">
-          <label for="area">Área do desafio *</label>
+          <select [(ngModel)]="desafio.area" name="area">
+            <ng-container *ngFor="let area of areaoptions | async">
+              <option value="{{area.nome}}">{{area.nome}}</option>
+            </ng-container>
+
+          </select>
+          <label>Área do Desafio *</label>
         </div>
         <div class="input-field col s3">
           <input [(ngModel)]="prazo" id="prazo" name="prazo" type="text" class="datepicker validate">
@@ -143,6 +170,20 @@
           <input [(ngModel)]="hora" id="h" name="h" type="text" class="timepicker validate">
           <label for="h">Prazo do desafio (hora) *</label>
         </div>
+      </div>
+      <div class="row">
+        <p>
+          <label>
+            <input [(ngModel)]="desafio.remunerado" value="Sim" name="remunerado" type="radio" />
+            <span>Remunerado</span>
+          </label>
+        </p>
+        <p>
+          <label>
+            <input value="Não" name="remunerado" type="radio" checked />
+            <span>Não Remunerado</span>
+          </label>
+        </p>
       </div>
       <div class="row">
         <div class="input-field col s12">
@@ -186,7 +227,11 @@
       <div class="row">
         <div class="input-field col s6">
           <span>Área do desafio *</span>
-          <input [(ngModel)]="found.area" id="area" type="text" name="area">
+          <select [(ngModel)]="found.area" name="area">
+            <ng-container *ngFor="let area of areaoptions | async">
+              <option value="{{area.nome}}">{{area.nome}}</option>
+            </ng-container>
+          </select>
         </div>
         <div class="input-field col s3">
           <span>Prazo do desafio (data)*</span>
@@ -196,6 +241,20 @@
           <span>Prazo do desafio (hora)*</span>
           <input [(ngModel)]="hora" id="hEdit" name="h" type="text" class="timepicker">
         </div>
+      </div>
+      <div class="row">
+        <p>
+          <label>
+            <input [(ngModel)]="found.remunerado" value="Sim" name="remunerado" type="radio" />
+            <span>Remunerado</span>
+          </label>
+        </p>
+        <p>
+          <label>
+            <input value="Não" name="remunerado" type="radio" checked />
+            <span>Não Remunerado</span>
+          </label>
+        </p>
       </div>
       <div class="row">
         <div class="input-field col s12">

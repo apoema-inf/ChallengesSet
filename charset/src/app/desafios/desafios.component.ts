@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { Desafio } from '../models/desafio.model';
 import { Solver } from '../models/solver.model';
 import * as firebase from 'firebase';
+import { Area } from '../models/area.model';
 
 declare var M: any;
 declare var $: any;
@@ -18,6 +19,7 @@ export class DesafiosComponent implements OnInit {
 
   desafios: Observable<Desafio[]>;
   solucoes: Observable<Solver[]>;
+  areaoptions: Observable<Area[]>;
   userEmail: string;
   user: any;
   desafio: Desafio = new Desafio();
@@ -28,8 +30,10 @@ export class DesafiosComponent implements OnInit {
   solverFound: Solver = new Solver();
   solucoesArray: string[] = [''];
   solucoesFilter: boolean = false;
-  statusConcluido: string = '';
+  status: string = '';
   search: string = '';
+  area: string = '';
+  remunerado: string = '';
 
   constructor(private db: AngularFirestore) {
 
@@ -67,6 +71,22 @@ export class DesafiosComponent implements OnInit {
             if (data.emailsolver == this.user.email)
               that.solucoesArray.push(data.idDesafio);
 
+            return data;
+
+          });
+      }))
+
+    this.areaoptions = db.collection('areaoptions').snapshotChanges().pipe(map(
+
+      changes => {
+
+        return changes.map(
+
+          a => {
+
+            const data = a.payload.doc.data() as Area;
+
+            data.id = a.payload.doc.id;
             return data;
 
           });
@@ -150,12 +170,17 @@ export class DesafiosComponent implements OnInit {
   cleanFilters() {
     this.userEmail = '';
     this.solucoesFilter = false;
-    this.statusConcluido = '';
+    this.status = '';
+    this.area = '';
+    this.remunerado = '';
   }
 
   createDesafio() {
     this.desafio.prazo = $('#prazo').datepicker().val();
     this.hora = $('#h').timepicker().val();
+    if (this.desafio.remunerado != "Sim") {
+      this.desafio.remunerado = "Não";
+    }
 
     if (this.desafio.nome == (null || '' || undefined) ||
       this.desafio.prazo == (null || '' || undefined) ||
@@ -180,7 +205,8 @@ export class DesafiosComponent implements OnInit {
       resumo: this.desafio.resumo,
       area: this.desafio.area,
       emaildemandante: this.user.email,
-      status: ''
+      status: 'submissão',
+      remunerado: this.desafio.remunerado
     })
       .then(function () {
         $('#modal1').modal('close');
@@ -229,6 +255,9 @@ export class DesafiosComponent implements OnInit {
 
     this.prazo = $('#prazoEdit').datepicker().val();
     this.hora = $('#hEdit').timepicker().val();
+    if (this.found.remunerado != "Sim") {
+      this.found.remunerado = "Não";
+    }
 
     var dateParts = this.prazo.split("/");
     var timeParts = this.hora.split(':');
@@ -244,7 +273,8 @@ export class DesafiosComponent implements OnInit {
         prazo: dateObject,
         resumo: this.found.resumo,
         area: this.found.area,
-        emaildemandante: this.user.email
+        emaildemandante: this.user.email,
+        remunerado: this.found.remunerado
       })
       .then(function () {
         $('#modalEdit').modal('close');
@@ -319,9 +349,19 @@ export class DesafiosComponent implements OnInit {
 
   }
 
-  setStatusConcluido() {
+  setStatus(string) {
     this.cleanFilters();
-    this.statusConcluido = 'concluído';
+    this.status = string;
+  }
+
+  setRemunerado() {
+    this.cleanFilters();
+    this.remunerado = "Sim";
+  }
+
+  setArea(string) {
+    this.cleanFilters();
+    this.area = string;
   }
 
   reInitMaterialize() {

@@ -12,6 +12,10 @@
     width: 200px !important;
 }
 
+#dropdownArea {
+    width: 300px !important;
+}
+
 #dropdownVer {
     width: 250px !important;
 }
