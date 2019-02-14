@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 import { User } from './models/user.model';
 import { Router } from '@angular/router';
 
-declare var M: any;
+declare var UIkit: any;
 
 @Injectable()
 export class AuthService {
@@ -17,6 +17,15 @@ export class AuthService {
 
   constructor(public firebaseAuth: AngularFireAuth, private db: AngularFirestore,
     private router: Router, ) {
+  }
+
+  criarNotificacao(mensagem: string, tipo: string) {
+    UIkit.notification({
+      message: mensagem,
+      status: tipo,
+      pos: 'top-right',
+      timeout: 5000
+    });
   }
 
   signup(user: User) {
@@ -30,10 +39,11 @@ export class AuthService {
           email: user.email,
           profile: user.profile
         })
-        console.log('Success!', value);
+        that.criarNotificacao("<span uk-icon=\'icon: check\'></span> Cadastro criado com sucesso!", "success");
         (document.getElementById('cadastroForm') as HTMLFormElement).reset();
       })
       .catch(err => {
+        that.criarNotificacao("<span uk-icon=\'icon: ban\'></span>" + err.message, "danger");
       });
   }
 

@@ -1,4 +1,10 @@
 .cadastro-title {
     color: #007fa3;
-    font-size: 2.5vw;
+    font-size: 1.5em;
+}
+
+@media screen and (max-width: 500px) {
+  .merge div {
+    margin-right: 13px;
+  }
 }

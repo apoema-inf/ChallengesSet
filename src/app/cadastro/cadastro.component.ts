@@ -3,8 +3,7 @@ import { AuthService } from '../auth.service';
 import { User } from '../models/user.model';
 import { Router } from '@angular/router';
 
-declare var $: any;
-declare var M:any;
+declare var UIkit: any;
 
 @Component({
   selector: 'app-cadastro',
@@ -18,25 +17,47 @@ export class CadastroComponent implements OnInit {
   constructor(public authService: AuthService, public router: Router) {
     var that = this;
     this.authService.getUser().then(function (user) {
-      if(user) {
+      if (user) {
         that.router.navigate(['/home']);
       }
     });
   }
-  
-  ngOnInit() {
-    $('select').formSelect();
 
+  ngOnInit() {
+
+  }
+
+  criarNotificacao(mensagem: string, tipo: string) {
+    UIkit.notification({
+      message: mensagem,
+      status: tipo,
+      pos: 'top-right',
+      timeout: 5000
+    });
   }
 
   signup() {
-    if(this.user.profile == (null || undefined || '') ||
-    this.user.email == (null || undefined || '') ||
-    this.user.senha == (null || undefined || '') ||
-    this.user.nome == (null || undefined || '')) {
-      return;
+    if (this.user.profile == null ||
+        this.user.profile == undefined ||
+        this.user.profile == '') {
+          this.criarNotificacao("O campo 'Perfil de Usuário' deve ser informado.", "warning");
+          return;
+    } else if (this.user.nome == null ||
+        this.user.nome == undefined ||
+        this.user.nome == '') {
+          this.criarNotificacao("O campo 'Nome' deve ser informado.", "warning");
+          return;
+    } else if (this.user.senha == null ||
+      this.user.senha == undefined ||
+      this.user.senha == '') {
+        this.criarNotificacao("O campo 'Senha' deve ser informado.", "warning");
+        return;
+    } else if (this.user.email == null ||
+      this.user.email == undefined ||
+      this.user.email == '') {
+        this.criarNotificacao("O campo 'E-mail' deve ser informado.", "warning");
+        return;
     }
     this.authService.signup(this.user);
   }
-
 }

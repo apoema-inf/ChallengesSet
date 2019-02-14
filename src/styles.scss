@@ -27,3 +27,32 @@ body {
 #dropdown1 li:hover {
     background-color: #ffee58 !important;
 }
+
+.uk-button-text {
+  text-transform: initial !important;
+}
+
+.uk-button {
+  text-transform: capitalize;
+  border-radius: 20px;
+}
+
+.uk-button:hover {
+  border-radius: 0px;
+  transition: all 1s ease;
+}
+
+.uk-notification-message-success {
+  background-color: #32d296;
+  color: white;
+}
+
+.uk-notification-message-danger {
+  background-color: crimson;
+  color: white;
+}
+
+.uk-notification-message-warning {
+  background-color: orange;
+  color: white;
+}
