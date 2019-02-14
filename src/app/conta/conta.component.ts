@@ -16,6 +16,8 @@ export class ContaComponent implements OnInit {
     this.authService.getUser().then(function (user) {
       if(!user) {
         that.router.navigate(['/home']);
+      } else {
+        that.user = user as User;
       }
     });
   }
