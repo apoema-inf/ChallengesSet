@@ -13,7 +13,7 @@ declare var $: any;
 @Component({
   selector: 'app-desafios',
   templateUrl: './desafios.component.html',
-  styleUrls: ['./desafios.component.css']
+  styleUrls: ['./desafios.component.scss']
 })
 export class DesafiosComponent implements OnInit {
 

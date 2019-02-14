@@ -1,5 +1,7 @@
+@import '../../assets/sass/variables';
+
 .navbar {
-    background-color: #01579b;
+    background-color: $color-navbar;
 }
 
 .navbar a{
@@ -16,10 +18,10 @@
 
 .active {
     background-color: #fffafa;
-    color: #01579b !important;
+    color: $color-navbar !important;
     opacity: 1 !important;
 }
 
 .uk-navbar-dropdown-nav a{
-    color: #01579b;
+    color: $color-navbar;
 }

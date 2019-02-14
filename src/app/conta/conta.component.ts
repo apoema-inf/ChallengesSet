@@ -6,7 +6,7 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-conta',
   templateUrl: './conta.component.html',
-  styleUrls: ['./conta.component.css']
+  styleUrls: ['./conta.component.scss']
 })
 export class ContaComponent implements OnInit {
   user: User = new User();

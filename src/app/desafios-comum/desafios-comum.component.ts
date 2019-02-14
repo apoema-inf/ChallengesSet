@@ -9,7 +9,7 @@ declare var M: any;
 @Component({
   selector: 'app-desafios-comum',
   templateUrl: './desafios-comum.component.html',
-  styleUrls: ['./desafios-comum.component.css']
+  styleUrls: ['./desafios-comum.component.scss']
 })
 export class DesafiosComumComponent implements OnInit {
   desafios: Observable<Desafio[]>;
