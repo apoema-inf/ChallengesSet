@@ -21,6 +21,7 @@ export class HomeComponent {
     var that = this;
     this.authService.getUser().then(function (user) {
       that.user = user as User;
+      console.log(that.user);
     });
   }
 
