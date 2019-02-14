@@ -1,17 +1,22 @@
-<div class="container">
-  <h5 class="blue-grey-text text-darken-1"><b>Seu Perfil</b>
-    <hr>
-  </h5>
-  <div class="row">
-    <p><b class="blue-text text-darken-3">Nome:</b> {{user.nome}} <a class="btn-floating btn-small waves-effect waves-light blue"><i
-          class="material-icons">edit</i></a>
-    </p>
-
-    <p><b class="blue-text text-darken-3">Email:</b> {{user.email}} <a class="btn-floating btn-small waves-effect waves-light blue"><i
-          class="material-icons">edit</i></a></p>
-    <p><b class="blue-text text-darken-3">Profile:</b> {{user.profile}} <a class="btn-floating btn-small waves-effect waves-light blue"><i
-          class="material-icons">edit</i></a></p>
-    <a (click)="redefinirSenha()" class="waves-effect waves-light btn-small yellow darken-3">Redefinir Senha</a>
-
+<div class="uk-container">
+  <div class="uk-flex uk-flex-middle uk-child-width-1-1" uk-grid>
+    <div>
+      <h5 class="meu-perfil" align="center">
+        <b>Meu perfil</b>
+        <hr class="uk-divider-icon">
+      </h5>
+    </div>
+    <div class="uk-flex uk-flex-center">
+      <div>
+          <p><b>Nome:</b> <input id="nome" class="uk-input" type="text" value="{{user.nome}}" readonly="true"> <a id="nomeEdit" (click)="editar('nome')">editar</a></p>
+          <p><b>Email:</b> <input id="email" class="uk-input" type="text" value="{{user.email}}" readonly="true"> <a id="emailEdit" (click)="editar('email')">editar</a></p>
+          <p><b>Profile:</b> <select id="profile" class="uk-select" type="text" value="{{user.profile}}" disabled="true">
+              <option>Ambos</option>
+              <option>Demandante</option>
+              <option>Solucionador</option>
+          </select><a (click)="editar('profile')">editar</a></p>
+          <a id="redefinir" (click)="redefinirSenha()">Redefinir senha</a>
+      </div>
+    </div>
   </div>
 </div>
