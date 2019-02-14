@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../auth.service';
+import { User } from '../models/user.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-conta',
@@ -7,11 +9,16 @@ import { AuthService } from '../auth.service';
   styleUrls: ['./conta.component.css']
 })
 export class ContaComponent implements OnInit {
-  user: any;
+  user: User = new User();
 
-  constructor(private authService: AuthService) {
-    this.user = JSON.parse(localStorage.getItem('user'));
-   }
+  constructor(private authService: AuthService, private router: Router) {
+    var that = this;
+    this.authService.getUser().then(function (user) {
+      if(!user) {
+        that.router.navigate(['/home']);
+      }
+    });
+  }
 
   ngOnInit() {
   }

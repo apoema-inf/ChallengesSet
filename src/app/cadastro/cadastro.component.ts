@@ -16,7 +16,12 @@ export class CadastroComponent implements OnInit {
   user: User = new User();
 
   constructor(public authService: AuthService, public router: Router) {
-    
+    var that = this;
+    this.authService.getUser().then(function (user) {
+      if(user) {
+        that.router.navigate(['/home']);
+      }
+    });
   }
   
   ngOnInit() {

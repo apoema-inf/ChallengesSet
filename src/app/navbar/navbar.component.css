@@ -1,5 +1,5 @@
 .navbar {
-    background-color: #39f;
+    background-color: #01579b;
 }
 
 .navbar a{
@@ -16,10 +16,10 @@
 
 .active {
     background-color: #fffafa;
-    color: #39f !important;
+    color: #01579b !important;
     opacity: 1 !important;
 }
 
 .uk-navbar-dropdown-nav a{
-    color: #39f;
+    color: #01579b;
 }

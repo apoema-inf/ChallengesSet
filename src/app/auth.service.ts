@@ -12,12 +12,11 @@ declare var M: any;
 
 @Injectable()
 export class AuthService {
-  user: Observable<firebase.User>;
+  user: User = new User();
   firebase: any;
 
   constructor(public firebaseAuth: AngularFireAuth, private db: AngularFirestore,
     private router: Router, ) {
-    this.user = firebaseAuth.authState;
   }
 
   signup(user: User) {
@@ -63,7 +62,6 @@ export class AuthService {
           .toPromise()
           .then((value) => {
             that.db.collection('users').doc(value.docs[0].id).ref.get().then(documentSnapshot => {
-              localStorage.setItem('user', JSON.stringify(documentSnapshot.data()));
               window.location.replace('/desafios');
             })
           })
@@ -77,7 +75,6 @@ export class AuthService {
     this.firebaseAuth
       .auth
       .signOut().then(function () {
-        localStorage.clear();
         window.location.replace('/home');
       });
   }
@@ -86,6 +83,31 @@ export class AuthService {
 
     this.firebaseAuth.auth.sendPasswordResetEmail(email).then(function () {
     }).catch(function (error) {
+    });
+  }
+
+  getUser() {
+    var that = this;
+
+    return new Promise(function (resolve, reject) {
+      that.firebaseAuth.auth.onAuthStateChanged(function (user) {
+        if (user) {
+          that.db.collection("users").ref.where("email", "==", user.email)
+            .get()
+            .then(function (querySnapshot) {
+              querySnapshot.forEach(function (doc) {
+                // doc.data() is never undefined for query doc snapshots
+                //console.log(doc.id, " => ", doc.data().nome);
+                resolve(doc.data());
+              });
+            })
+            .catch(function (error) {
+              reject(error);
+            });
+        } else {
+          // No user is signed in.
+        }
+      });
     });
   }
 
