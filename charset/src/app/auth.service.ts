@@ -33,10 +33,8 @@ export class AuthService {
         })
         console.log('Success!', value);
         (document.getElementById('cadastroForm') as HTMLFormElement).reset();
-        M.toast({ html: 'Usuário cadastrado com sucesso', classes: 'rounded' });
       })
       .catch(err => {
-        M.toast({ html: err.message, classes: 'rounded' });
       });
   }
 
@@ -66,13 +64,11 @@ export class AuthService {
           .then((value) => {
             that.db.collection('users').doc(value.docs[0].id).ref.get().then(documentSnapshot => {
               localStorage.setItem('user', JSON.stringify(documentSnapshot.data()));
-              M.toast({ html: 'Usuário autenticado', classes: 'rounded' });
               window.location.replace('/desafios');
             })
           })
       })
       .catch(err => {
-        M.toast({ html: err.message, classes: 'rounded' });
       });
   }
 
@@ -81,7 +77,6 @@ export class AuthService {
     this.firebaseAuth
       .auth
       .signOut().then(function () {
-        M.toast({ html: 'Usuário deslogado', classes: 'rounded' });
         localStorage.clear();
         window.location.replace('/home');
       });
@@ -90,9 +85,7 @@ export class AuthService {
   forgotPassword(email) {
 
     this.firebaseAuth.auth.sendPasswordResetEmail(email).then(function () {
-      M.toast({ html: 'Você receberá um email para a redefinição de sua senha em ' + email, classes: 'rounded' });
     }).catch(function (error) {
-      M.toast({ html: error, classes: 'rounded' });
     });
   }
 

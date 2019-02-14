@@ -21,11 +21,9 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    M.AutoInit();
   }
 
   reInitMaterialize() {
-    M.AutoInit();
     $('#dropdown-user').dropdown('open');
   }
 

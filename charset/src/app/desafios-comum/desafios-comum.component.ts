@@ -35,7 +35,6 @@ export class DesafiosComumComponent implements OnInit {
   }
 
   ngOnInit() {
-    M.AutoInit();
   }
 
   cleanFilters() {

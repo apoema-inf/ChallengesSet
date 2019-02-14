@@ -23,7 +23,6 @@ export class HomeComponent {
   login() {
     if (this.email == (null || '' || undefined) ||
       this.password == (null || '' || undefined)) {
-      M.toast({ html: 'Preencha os campos', classes: 'rounded' });
       return;
     }
     this.authService.login(this.email, this.password);
@@ -31,7 +30,6 @@ export class HomeComponent {
 
   forgotPassword() {
     if (this.email == (null || '' || undefined)) {
-      M.toast({ html: 'Preencha o campo email', classes: 'rounded' });
       return;
     }
     this.authService.forgotPassword('hyagosouzza@hotmail.com');

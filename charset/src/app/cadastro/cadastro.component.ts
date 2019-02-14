@@ -16,9 +16,7 @@ export class CadastroComponent implements OnInit {
   user: User = new User();
 
   constructor(public authService: AuthService, public router: Router) {
-    if(JSON.parse(localStorage.getItem('user'))) {
-      router.navigate(['home']);
-    }
+    
   }
   
   ngOnInit() {
@@ -31,7 +29,6 @@ export class CadastroComponent implements OnInit {
     this.user.email == (null || undefined || '') ||
     this.user.senha == (null || undefined || '') ||
     this.user.nome == (null || undefined || '')) {
-      M.toast({html: 'Todos os campos devem ser preenchidos', classes: 'rounded'});
       return;
     }
     this.authService.signup(this.user);

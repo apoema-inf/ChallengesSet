@@ -7,14 +7,38 @@
 }
 
 .entrar {
-    background-color: #0d47a1;
+    background-color: #39f;
 }
 
 .cadastrar {
     background-color: #bf360c;
+    color: white;
 }
 
 .img-home {
     background: url('http://www.ucatx.cat/wallpic/full/142/1428846/strategy-wallpaper.jpg') no-repeat center center;
     background-size: cover;
+}
+
+.title-login {
+    color: #39f;
+    font-size: 3vw;
+}
+
+.uk-card {
+    border-radius: 20px;
+}
+
+.uk-button-text {
+    text-transform: initial !important;
+}
+
+.uk-button {
+    text-transform: capitalize;
+    border-radius: 20px;
+}
+
+.uk-button:hover {
+    border-radius: 0px;
+    transition: all 1s ease;
 }

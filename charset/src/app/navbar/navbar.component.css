@@ -1,0 +1,25 @@
+.navbar {
+    background-color: #39f;
+}
+
+.navbar a{
+    color: #fffafa;
+    font-family: 'Montserrat', sans-serif;
+    text-transform: capitalize;
+}
+
+
+.navbar a:hover{
+    opacity: .6;
+    transition: all 1s ease;
+}
+
+.active {
+    background-color: #fffafa;
+    color: #39f !important;
+    opacity: 1 !important;
+}
+
+.uk-navbar-dropdown-nav a{
+    color: #39f;
+}
