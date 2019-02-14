@@ -1,32 +1,30 @@
 <div class="uk-section">
   <div class="uk-container">
     <h2 class="cadastro-title"><b>Cadastro de novo usuário</b></h2>
-    <form id="cadastroForm" class="col s12">
-      <div class="row">
-        <div class="input-field col s6">
-          <input [(ngModel)]="user.nome" id="nome" type="text" class="validate" name="nome">
-          <label for="nome">Nome</label>
+
+    <form  id="cadastroForm">
+      <div class="uk-child-width-1-2@m uk-child-width-1-1@s merge" uk-grid>
+        <div class="uk-flex uk-flex-center">
+          <input class="uk-input" placeholder="E-mail" [(ngModel)]="email" id="email" type="email" name="email" />
         </div>
-        <div class="input-field col s6">
-          <input [(ngModel)]="user.senha" id="senha" type="password" class="validate" name="senha">
-          <label for="senha">Senha</label>
+        <div>
+          <input [(ngModel)]="user.senha" class="uk-input" type="password" placeholder="Senha" name="senha"/>
         </div>
-      </div>
-      <div class="row">
-        <div class="input-field col s6">
-          <input [(ngModel)]="user.email" id="email" type="email" class="validate" name="email">
-          <label for="email">Email</label>
+        <div>
+          <input id="nome" class="uk-input" type="text" placeholder="Nome" [(ngModel)]="user.nome" name="nome"/>
         </div>
-        <div class="input-field col s6">
-          <select [(ngModel)]="user.profile" name="profile">
+        <div>
+          <select class="uk-select" [(ngModel)]="user.profile" name="profile">
             <option value='' disabled selected>Perfil de usuário</option>
             <option value='Solucionador'>Solucionador</option>
             <option value='Demandante'>Demandante</option>
             <option value='Ambos'>Ambos</option>
           </select>
         </div>
+        <div>
+          <button class="uk-button uk-button-primary" (click)="signup()">Cadastrar</button>
+        </div>
       </div>
-      <button class="waves-effect waves-light btn green" (click)="signup()">Cadastrar</button>
     </form>
   </div>
 </div>
