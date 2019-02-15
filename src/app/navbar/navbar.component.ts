@@ -16,10 +16,8 @@ export class NavbarComponent implements OnInit {
     this.authService.getUser().then(function (user) {
       if(user) {
         that.logado = true;
-        console.log(that.logado);
       } else {
         that.logado = false;
-        console.log(that.logado);
       }
     });
    }

@@ -7,7 +7,6 @@ import { Solver } from '../models/solver.model';
 import * as firebase from 'firebase';
 import { Area } from '../models/area.model';
 
-declare var M: any;
 declare var $: any;
 
 @Component({
@@ -95,7 +94,6 @@ export class DesafiosComponent implements OnInit {
   }
 
   ngOnInit() {
-    M.AutoInit();
     $('#modalDelete').modal({
       opacity: 0.1
     });
@@ -187,7 +185,6 @@ export class DesafiosComponent implements OnInit {
       this.desafio.area == (null || '' || undefined) ||
       this.hora == (null || '' || undefined) ||
       this.desafio.resumo == (null || '' || undefined)) {
-      M.toast({ html: 'Preencha todos os campos obrigatório.', classes: 'rounded' });
       return;
     }
 
@@ -210,11 +207,9 @@ export class DesafiosComponent implements OnInit {
     })
       .then(function () {
         $('#modal1').modal('close');
-        M.toast({ html: 'Desafio criado com sucesso!', classes: 'rounded' });
         (document.getElementById('myForm') as HTMLFormElement).reset();
       })
       .catch(function () {
-        M.toast({ html: 'Não foi possível criar o desafio', classes: 'rounded' });
       });
 
   }
@@ -245,9 +240,7 @@ export class DesafiosComponent implements OnInit {
   deleteDesafio() {
     this.db.collection("desafios").doc(this.found.id).delete().then(function () {
       $('#modalDelete').modal('close');
-      M.toast({ html: 'Desafio deletado com sucesso!', classes: 'rounded' });
     }).catch(function () {
-      M.toast({ html: 'Não foi possível deletar o desafio', classes: 'rounded' });
     });
   }
 
@@ -278,11 +271,9 @@ export class DesafiosComponent implements OnInit {
       })
       .then(function () {
         $('#modalEdit').modal('close');
-        M.toast({ html: 'Desafio editado com sucesso!', classes: 'rounded' });
       })
       .catch(function () {
         // The document probably doesn't exist.
-        M.toast({ html: 'Não foi possível editar o desafio', classes: 'rounded' });
       });
   }
 
@@ -293,7 +284,6 @@ export class DesafiosComponent implements OnInit {
   enviarSolver() {
 
     if (this.solver.resumo == (null || '' || undefined)) {
-      M.toast({ html: 'Informe a sua solução para o problema.', classes: 'rounded' });
       return;
     }
 
@@ -307,11 +297,9 @@ export class DesafiosComponent implements OnInit {
       })
       .then(function () {
         $('#modalSolver').modal('close');
-        M.toast({ html: 'Solução enviada com sucesso!', classes: 'rounded' });
         (document.getElementById('formSolver') as HTMLFormElement).reset();
       })
       .catch(function () {
-        M.toast({ html: 'Não foi possível enviar a solução', classes: 'rounded' });
       });
   }
 
@@ -340,11 +328,9 @@ export class DesafiosComponent implements OnInit {
       })
       .then(function () {
         $('#modalComplete').modal('close');
-        M.toast({ html: 'Desafio concluído com sucesso!', classes: 'rounded' });
       })
       .catch(function () {
         // The document probably doesn't exist.
-        M.toast({ html: 'Não foi possível concluir o desafio', classes: 'rounded' });
       });
 
   }
@@ -365,7 +351,7 @@ export class DesafiosComponent implements OnInit {
   }
 
   reInitMaterialize() {
-    M.AutoInit();
+    
   }
 }
 
