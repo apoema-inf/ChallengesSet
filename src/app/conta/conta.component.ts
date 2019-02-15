@@ -3,6 +3,7 @@ import { AuthService } from '../auth.service';
 import { User } from '../models/user.model';
 import { Router } from '@angular/router';
 import { AngularFirestore } from 'angularfire2/firestore';
+import { AngularFireAuth } from 'angularfire2/auth';
 
 declare var $: any;
 
@@ -14,7 +15,7 @@ declare var $: any;
 export class ContaComponent implements OnInit {
   user: User = new User();
   editando: boolean[] = [false, false, false];
-  constructor(private authService: AuthService, private router: Router, private db: AngularFirestore) {
+  constructor(private authService: AuthService, private router: Router, private db: AngularFirestore, private auth: AngularFireAuth) {
     var that = this;
     this.authService.getUser().then(function (user) {
       if (!user) {
@@ -50,12 +51,24 @@ export class ContaComponent implements OnInit {
   }
 
   private salvarCampo(input: string) {
+    var that = this;
     var userRef = this.db.collection("users").doc(this.user.id);
     return userRef.update({
       [input]: $('#' + input).val()
     })
       .then(function () {
         console.log("Document successfully updated!");
+        if (input === 'email') {
+          var user = that.auth.auth.currentUser;
+          let userEmail = $('#' + input).val();
+          user.updateEmail(
+            userEmail
+          ).then(function() {
+            // Update successful.
+          }).catch(function(error) {
+            // An error happened.
+          });
+        }
       })
       .catch(function (error) {
         console.error("Error updating document: ", error);

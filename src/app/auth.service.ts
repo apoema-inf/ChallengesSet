@@ -16,7 +16,7 @@ export class AuthService {
   firebase: any;
 
   constructor(public firebaseAuth: AngularFireAuth, private db: AngularFirestore,
-    private router: Router, ) {
+    private router: Router) {
   }
 
   criarNotificacao(mensagem: string, tipo: string) {
@@ -71,9 +71,9 @@ export class AuthService {
           .get()
           .toPromise()
           .then((value) => {
-            that.db.collection('users').doc(value.docs[0].id).ref.get().then(documentSnapshot => {
+            //that.db.collection('users').doc(value.docs[0].id).ref.get().then(documentSnapshot => {
               window.location.replace('/desafios');
-            })
+            //})
           })
       })
       .catch(err => {
