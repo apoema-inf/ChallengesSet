@@ -25,6 +25,11 @@ body {
       }
     }
     li:hover {
+      a.active {
+        color: $color-navbar !important;
+        opacity: 1;
+        transition: all 0.7s ease;
+      }
       a {
         color: $bg-item-nav !important;
         opacity: 0.7;
@@ -54,7 +59,7 @@ body {
 .active {
   background-color: $bg-item-nav;
   color: $color-navbar !important;
-  opacity: 1;
+  opacity: 1 !important;
 }
 
 .uk-navbar-dropdown-nav a {
@@ -74,19 +79,24 @@ body {
   }
 }
 
+.uk-notification-message-primary {
+  background-color: $notify-primary;
+  @include estilo-notify;
+}
+
 .uk-notification-message-success {
   background-color: $notify-success;
-  color: $color-white;
+  @include estilo-notify;
 }
 
 .uk-notification-message-danger {
   background-color: $notify-danger;
-  color: $color-white;
+  @include estilo-notify;
 }
 
 .uk-notification-message-warning {
   background-color: $notify-warning;
-  color: $color-white;
+  @include estilo-notify;
 }
 
 .img-home {
@@ -95,7 +105,7 @@ body {
 }
 
 .title-login {
-  color: #01579b;
+  color: $color-navbar !important;
   font-size: 3vw;
 }
 
@@ -104,7 +114,7 @@ body {
 }
 
 .page-footer {
-  background-color: #01579b;
+  background-color: $color-navbar;
 }
 
 .white-text {

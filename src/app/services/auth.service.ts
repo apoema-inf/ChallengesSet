@@ -1,31 +1,25 @@
 import { Injectable } from '@angular/core';
 
 import { AngularFireAuth } from 'angularfire2/auth';
-import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
+import { AngularFirestore } from 'angularfire2/firestore';
 import * as firebase from 'firebase/app';
 
-import { Observable } from 'rxjs';
-import { User } from './models/user.model';
+import { User } from '../models/user.model';
 import { Router } from '@angular/router';
+import { NotifyService } from './notify.service';
+import { Observable } from 'rxjs';
 
-declare var UIkit: any;
+declare var $: any;
 
 @Injectable()
 export class AuthService {
   user: User = new User();
+  userObservable: Observable<firebase.User>;
   firebase: any;
 
   constructor(public firebaseAuth: AngularFireAuth, private db: AngularFirestore,
-    private router: Router) {
-  }
-
-  criarNotificacao(mensagem: string, tipo: string) {
-    UIkit.notification({
-      message: mensagem,
-      status: tipo,
-      pos: 'top-right',
-      timeout: 5000
-    });
+    private router: Router, private notifyService: NotifyService) {
+      this.userObservable = firebaseAuth.authState;
   }
 
   signup(user: User) {
@@ -39,15 +33,16 @@ export class AuthService {
           email: user.email,
           profile: user.profile
         })
-        that.criarNotificacao("<span uk-icon=\'icon: check\'></span> Cadastro criado com sucesso!", "success");
+        that.notifyService.criarNotificacao("<span uk-icon=\'icon: check\'></span> Cadastro criado com sucesso!", "success");
         (document.getElementById('cadastroForm') as HTMLFormElement).reset();
       })
       .catch(err => {
-        that.criarNotificacao("<span uk-icon=\'icon: ban\'></span>" + err.message, "danger");
+        that.notifyService.criarNotificacao("<span uk-icon=\'icon: ban\'></span>" + err.message, "danger");
       });
   }
 
   login(email: string, password: string) {
+    $.LoadingOverlay("show");
     firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION)
       .then(function () {
         // Existing and future Auth states are now persisted in the current
@@ -72,20 +67,26 @@ export class AuthService {
           .toPromise()
           .then((value) => {
             //that.db.collection('users').doc(value.docs[0].id).ref.get().then(documentSnapshot => {
-              window.location.replace('/desafios');
+            that.router.navigate(['/desafios']);
+            that.notifyService.criarNotificacao("<span uk-icon=\'icon: check\'></span> Logado com sucesso!", "primary");
+            $.LoadingOverlay("hide");
             //})
           })
       })
       .catch(err => {
+        $.LoadingOverlay("hide");
       });
   }
 
   logout() {
+    $.LoadingOverlay("show");
     var that = this;
     this.firebaseAuth
       .auth
       .signOut().then(function () {
-        window.location.replace('/home');
+        that.router.navigate(['/home']);
+        $.LoadingOverlay("hide");
+        that.notifyService.criarNotificacao("<span uk-icon=\'icon: check\'></span> Deslogado com sucesso!", "primary");
       });
   }
 
@@ -119,7 +120,7 @@ export class AuthService {
               reject(error);
             });
         } else {
-          // No user is signed in.
+          resolve(null);
         }
       });
     });

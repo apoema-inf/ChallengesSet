@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from '../auth.service';
+import { AuthService } from '../services/auth.service';
 import { User } from '../models/user.model';
 
 declare var M: any;
@@ -12,17 +12,10 @@ declare var M: any;
 
 export class HomeComponent {
 
-  logado: boolean = false;
   email: string;
   password: string;
-  user: User = new User();
 
   constructor(public authService: AuthService) {
-    var that = this;
-    this.authService.getUser().then(function (user) {
-      that.user = user as User;
-      console.log(that.user);
-    });
   }
 
   login() {

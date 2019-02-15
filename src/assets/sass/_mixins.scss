@@ -1,6 +1,11 @@
 @mixin centralizar {
-    margin: { 
-        left: auto;
-        right: auto;
-    }
+  margin: {
+    left: auto;
+    right: auto;
+  }
+}
+
+@mixin estilo-notify {
+  font-size: 1em;
+  color: $color-white;
 }

@@ -2,7 +2,7 @@
     <div class="uk-container">
         <div class="uk-child-width-1-2@s uk-flex uk-flex-center" uk-grid>
             <div>
-                <div *ngIf="!user.email" class="uk-card uk-card-default uk-card-large uk-card-body ">
+                <div *ngIf="!(authService.userObservable | async)" class="uk-card uk-card-default uk-card-large uk-card-body ">
                     <h3 align="center" class="uk-card-title title-login">Login</h3>
                     <form (keyup.enter)="login()">
 

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from '../auth.service';
-import { User } from '../models/user.model';
+import { AuthService } from '../services/auth.service';
+import { Observable } from 'rxjs';
+import { User } from 'firebase';
 
 @Component({
   selector: 'app-navbar',
@@ -13,13 +14,6 @@ export class NavbarComponent implements OnInit {
 
   constructor(private authService: AuthService) {
     var that = this;
-    this.authService.getUser().then(function (user) {
-      if(user) {
-        that.logado = true;
-      } else {
-        that.logado = false;
-      }
-    });
    }
 
   ngOnInit() {
