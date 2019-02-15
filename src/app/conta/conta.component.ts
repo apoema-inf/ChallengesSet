@@ -32,21 +32,34 @@ export class ContaComponent implements OnInit {
     this.authService.forgotPassword(this.user.email);
   }
 
+  private set_mode(input: string, mode:string, color: string) {
+    $('#' + input + 'Edit').prop('text', mode);
+    $('#' + input + 'Edit').css('color', color);
+  }
+
+  private salvarModo(input: string) {
+    this.set_mode(input, 'editar', '#3880ff');
+    $('#' + input).addClass('pulse');
+  }
+
+  private editarModo(input: string) {
+    this.set_mode(input, 'salvar', '#10dc60');
+    $('#' + input).removeClass('pulse');
+  }
+
   editar(input: string) {
     switch(input) {
       case 'nome': this.editando[0] = !this.editando[0];
         $('#' + input).prop('readonly', !this.editando[0]);
-        if(this.editando[0] == true) {
-          $('#' + input + 'Edit').prop('text', 'salvar');
-        } else {
-          $('#' + input + 'Edit').prop('text', 'editar');
-        }
+        this.editando[0] ? this.editarModo(input) : this.salvarModo(input);
         break;
       case 'email': this.editando[1] = !this.editando[1];
         $('#' + input).prop('readonly', !this.editando[1]);
+        this.editando[1] ? this.editarModo(input) : this.salvarModo(input);
         break;
       case 'profile': this.editando[2] = !this.editando[2];
         $('#' + input).prop('disabled', !this.editando[2]);
+        this.editando[2] ? this.editarModo(input) : this.salvarModo(input);
         break;
     }
   }
