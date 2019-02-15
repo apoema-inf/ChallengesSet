@@ -1,3 +1,5 @@
+@import '../../assets/sass/variables';
+
 .meu-perfil {
     font-size: 1.5em;
     padding-top: 1.3em;
@@ -11,4 +13,12 @@ a {
 #redefinir {
     font-size: 100%;
     margin-left: 0px;
+}   
+
+.pulse {
+    animation: pulse 2s;
+}
+
+@keyframes pulse {
+    0% { background-color: $notify-success }
 }

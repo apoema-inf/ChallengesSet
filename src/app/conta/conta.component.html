@@ -7,15 +7,23 @@
       </h5>
     </div>
     <div class="uk-flex uk-flex-center">
-      <div>
-          <p><b>Nome:</b> <input id="nome" class="uk-input" type="text" value="{{user.nome}}" readonly="true"> <a id="nomeEdit" (click)="editar('nome')">editar</a></p>
-          <p><b>Email:</b> <input id="email" class="uk-input" type="text" value="{{user.email}}" readonly="true"> <a id="emailEdit" (click)="editar('email')">editar</a></p>
-          <p><b>Profile:</b> <select id="profile" class="uk-select" type="text" value="{{user.profile}}" disabled="true">
-              <option>Ambos</option>
-              <option>Demandante</option>
-              <option>Solucionador</option>
-          </select><a (click)="editar('profile')">editar</a></p>
-          <a id="redefinir" (click)="redefinirSenha()">Redefinir senha</a>
+      <div class="form-perfil">
+        <p><b>Nome:</b>
+          <input id="nome" class="uk-input" type="text" value="{{user.nome}}" readonly="true">
+          <a id="nomeEdit" (click)="editar('nome')">editar</a>
+        </p>
+        <p><b>Email:</b>
+          <input id="email" class="uk-input" type="text" value="{{user.email}}" readonly="true">
+          <a id="emailEdit" (click)="editar('email')">editar</a>
+        </p>
+        <p><b>Profile:</b>
+          <select id="profile" class="uk-select" type="text" value="{{user.profile}}" disabled="true">
+            <option>Ambos</option>
+            <option>Demandante</option>
+            <option>Solucionador</option>
+          </select><a id="profileEdit" (click)="editar('profile')">editar</a>
+        </p>
+        <a id="redefinir" (click)="redefinirSenha()">Redefinir senha</a>
       </div>
     </div>
   </div>
