@@ -1,31 +1,38 @@
-/* You can add global styles to this file, and also import other style files */
+@import "assets/sass/variables";
 
 body {
-    font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
 }
 
-.brand-logo img{
-    height: 45px;
+.brand-logo img {
+  height: 45px;
 }
 
 .font-bold {
-    font-weight: 600;
+  font-weight: 600;
 }
 
-#dropdown1 {
-    width: 200px !important;
+.navbar {
+  background-color: $color-navbar !important;
+  a {
+    color: $bg-item-nav;
+    font-family: "Montserrat", sans-serif;
+    text-transform: capitalize;
+    &:active {
+      color: $color-navbar !important;
+    }
+  }
+  
 }
 
-#dropdownArea {
-    width: 300px !important;
+.active {
+  background-color: $bg-item-nav;
+  color: $color-navbar !important;
+  opacity: 1;
 }
 
-#dropdownVer {
-    width: 250px !important;
-}
-
-#dropdown1 li:hover {
-    background-color: #ffee58 !important;
+.uk-navbar-dropdown-nav a {
+  color: $color-navbar;
 }
 
 .uk-button-text {
@@ -35,24 +42,58 @@ body {
 .uk-button {
   text-transform: capitalize;
   border-radius: 20px;
-}
-
-.uk-button:hover {
-  border-radius: 0px;
-  transition: all 1s ease;
+  &:hover {
+    border-radius: 0px;
+    transition: all 1s ease;
+  }
 }
 
 .uk-notification-message-success {
-  background-color: #32d296;
-  color: white;
+  background-color: $notify-success;
+  color: $color-white;
 }
 
 .uk-notification-message-danger {
-  background-color: crimson;
-  color: white;
+  background-color: $notify-danger;
+  color: $color-white;
 }
 
 .uk-notification-message-warning {
-  background-color: orange;
-  color: white;
+  background-color: $notify-warning;
+  color: $color-white;
+}
+
+.img-home {
+  background: url("http://www.ucatx.cat/wallpic/full/142/1428846/strategy-wallpaper.jpg") no-repeat center center;
+  background-size: cover;
+}
+
+.title-login {
+  color: #01579b;
+  font-size: 3vw;
+}
+
+.uk-card {
+  border-radius: 20px;
+}
+
+.page-footer {
+  background-color: #01579b;
+}
+
+.white-text {
+  color: $color-white;
+  font-weight: bold;
+  font-size: 1.5vw;
+}
+
+.cadastro-title {
+  color: #007fa3;
+  font-size: 1.5em;
+}
+
+@media screen and (max-width: 500px) {
+  .merge div {
+    margin-right: 13px;
+  }
 }
