@@ -1,4 +1,5 @@
 @import "assets/sass/variables";
+@import "assets/sass/mixins";
 
 body {
   font-family: "Montserrat", sans-serif;
@@ -14,15 +15,40 @@ body {
 
 .navbar {
   background-color: $color-navbar !important;
-  a {
-    color: $bg-item-nav;
-    font-family: "Montserrat", sans-serif;
-    text-transform: capitalize;
-    &:active {
-      color: $color-navbar !important;
+  .uk-navbar-center {
+    a {
+      color: $bg-item-nav;
+      font-family: "Montserrat", sans-serif;
+      text-transform: capitalize;
+      &:active {
+        color: $bg-item-nav !important;
+      }
+    }
+    li:hover {
+      a {
+        color: $bg-item-nav !important;
+        opacity: 0.7;
+        transition: all 0.7s ease;
+      }
     }
   }
+}
+
+.uk-open {
+  color: $color-white !important;
+}
+
+#icon-user {
   
+  &:hover {
+    color: $color-white;
+  }
+  &:active {
+    color: $color-white;
+  }
+  &:focus {
+    color: $color-white;
+  }
 }
 
 .active {

@@ -108,7 +108,11 @@ export class AuthService {
               querySnapshot.forEach(function (doc) {
                 // doc.data() is never undefined for query doc snapshots
                 //console.log(doc.id, " => ", doc.data().nome);
-                resolve(doc.data());
+                that.user.id = doc.id;
+                that.user.email = doc.data().email;
+                that.user.nome = doc.data().nome;
+                that.user.profile = doc.data().profile;
+                resolve(that.user);
               });
             })
             .catch(function (error) {
