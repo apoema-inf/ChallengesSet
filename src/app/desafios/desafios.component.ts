@@ -6,6 +6,8 @@ import { Desafio } from '../models/desafio.model';
 import { Solver } from '../models/solver.model';
 import * as firebase from 'firebase';
 import { Area } from '../models/area.model';
+import { AuthService } from '../services/auth.service';
+import { Moment } from 'moment';
 
 declare var $: any;
 
@@ -16,7 +18,15 @@ declare var $: any;
 })
 export class DesafiosComponent implements OnInit {
 
+  date: Date = new Date();
+  settings = {
+    bigBanner: false,
+    timePicker: false,
+    format: 'dd-MM-yyyy',
+    defaultOpen: false
+  }  
   desafios: Observable<Desafio[]>;
+  area2: string = "";
   solucoes: Observable<Solver[]>;
   areaoptions: Observable<Area[]>;
   userEmail: string;
@@ -34,10 +44,12 @@ export class DesafiosComponent implements OnInit {
   area: string = '';
   remunerado: string = '';
 
-  constructor(private db: AngularFirestore) {
+  constructor(private db: AngularFirestore, private authService: AuthService) {
 
     var that = this;
-    this.user = JSON.parse(localStorage.getItem('user'));
+    authService.getUser().then(function (user) {
+      that.user = user;
+    })
     this.desafios = db.collection('desafios').snapshotChanges().pipe(map(
 
       changes => {
@@ -94,65 +106,6 @@ export class DesafiosComponent implements OnInit {
   }
 
   ngOnInit() {
-    $('#modalDelete').modal({
-      opacity: 0.1
-    });
-    $('#modalComplete').modal({
-      opacity: 0.1
-    });
-    $('.datepicker').datepicker({
-      format: 'dd/mm/yyyy',
-      i18n: {
-        weekdaysShort: [
-          'Dom',
-          'Seg',
-          'Ter',
-          'Quar',
-          'Quin',
-          'Sex',
-          'Sáb'
-        ],
-        cancel: 'Cancelar',
-        months: [
-          'Janeiro',
-          'Fevereiro',
-          'Março',
-          'Abril',
-          'Maio',
-          'Junho',
-          'Julho',
-          'Agosto',
-          'Setembro',
-          'Outubro',
-          'Novembro',
-          'Dezembro'
-        ],
-        monthsShort: [
-          'Jan',
-          'Fev',
-          'Mar',
-          'Abr',
-          'Mai',
-          'Jun',
-          'Jul',
-          'Ago',
-          'Set',
-          'Out',
-          'Nov',
-          'Dez'
-        ],
-        weekdays: [
-          'Domingo',
-          'Segunda',
-          'Terça',
-          'Quarta',
-          'Quinta',
-          'Sexta',
-          'Sábado'
-        ],
-        weekdaysAbbrev: ['D', 'S', 'T', 'Qa', 'Qi', 'Se', 'Sa']
-      }
-    });
   }
 
   setUserEmail() {
@@ -351,7 +304,7 @@ export class DesafiosComponent implements OnInit {
   }
 
   reInitMaterialize() {
-    
+
   }
 }
 

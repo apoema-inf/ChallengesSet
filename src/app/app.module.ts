@@ -2,6 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import {NgPipesModule} from 'ngx-pipes';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
@@ -21,6 +22,9 @@ import { ContaComponent } from './conta/conta.component';
 import { DesafiosComumComponent } from './desafios-comum/desafios-comum.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { FooterComponent } from './footer/footer.component';
+import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
+import { AngularDateTimePickerModule } from 'angular2-datetimepicker';
+
 
 //import { AuthService } from './auth.service';
 const appRoutes: Routes = [
@@ -84,11 +88,14 @@ const appRoutes: Routes = [
       appRoutes),
     BrowserModule,
     NgPipesModule,
+    BrowserAnimationsModule,
     HttpClientModule,
     FormsModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,
-    AngularFirestoreModule
+    AngularFirestoreModule,
+    NgxMaterialTimepickerModule.forRoot(),
+    AngularDateTimePickerModule
   ],
   providers: [AuthService, AuthGuard],
   bootstrap: [AppComponent]

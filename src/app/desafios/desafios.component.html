@@ -6,10 +6,9 @@
       <div uk-grid>
         <div class="uk-width-1-2">
 
-          <a class="uk-button uk-button-default" href="" uk-toggle="target: #modal-criar-novo" *ngIf="user.profile !== 'Solucionador'"><span
+          <a class="uk-button uk-button-default" href="" uk-toggle="target: #modal-criar-novo"><span
               class="uk-margin-right" uk-icon="icon: plus"></span>
             Criar Novo</a>
-
           <div class="uk-inline">
             <button class="uk-button uk-button-default" type="button" uk-icon="icon: triangle-down">Área</button>
             <div uk-dropdown>
@@ -23,19 +22,26 @@
             <button class="uk-button uk-button-default" type="button" uk-icon="icon: triangle-down">Ver</button>
             <div uk-dropdown>
               <ul class="uk-nav uk-dropdown-nav">
-                <li *ngIf="user.profile !== 'Solucionador'" class="uk-active"><a (click)="setUserEmail()"><i class="fas fa-user uk-margin-right"></i>Meus
+                <li *ngIf="user?.profile !== 'Solucionador'" class="uk-active"><a (click)="setUserEmail()"><i
+                      class="fas fa-user uk-margin-right"></i>Meus
                     Desafios</a></li>
-                <li (click)="cleanFilters()" class="uk-active"><a (click)="setUserEmail()"><i class="fas fa-infinity uk-margin-right"></i>Todos
+                <li (click)="cleanFilters()" class="uk-active"><a (click)="setUserEmail()"><i
+                      class="fas fa-infinity uk-margin-right"></i>Todos
                     os Desafios</a></li>
-                <li class="uk-active"><a (click)="setStatus('concluído')"><i class="fas fa-check uk-margin-right"></i>Desafios
+                <li class="uk-active"><a (click)="setStatus('concluído')"><i
+                      class="fas fa-check uk-margin-right"></i>Desafios
                     Concluídos</a></li>
-                <li class="uk-active"><a (click)="setStatus('submissão')"><i class="fas fa-file-download uk-margin-right"></i>Desafios
+                <li class="uk-active"><a (click)="setStatus('submissão')"><i
+                      class="fas fa-file-download uk-margin-right"></i>Desafios
                     Submissão</a></li>
-                <li class="uk-active"><a (click)="setStatus('release')"><i class="fas fa-location-arrow uk-margin-right"></i>Desafios
+                <li class="uk-active"><a (click)="setStatus('release')"><i
+                      class="fas fa-location-arrow uk-margin-right"></i>Desafios
                     Release</a></li>
-                <li class="uk-active"><a (click)="setRemunerado()"><i class="fas fa-dollar-sign uk-margin-right"></i>Desafios
+                <li class="uk-active"><a (click)="setRemunerado()"><i
+                      class="fas fa-dollar-sign uk-margin-right"></i>Desafios
                     Remunerados</a></li>
-                <li *ngIf="user.profile != 'Demandante'" class="uk-active"><a (click)="setSolucoesFilter()"><i class="far fa-lightbulb uk-margin-right"></i>Minhas
+                <li *ngIf="user?.profile != 'Demandante'" class="uk-active"><a (click)="setSolucoesFilter()"><i
+                      class="far fa-lightbulb uk-margin-right"></i>Minhas
                     soluções</a></li>
               </ul>
             </div>
@@ -46,34 +52,40 @@
           <div class="uk-margin">
             <form class="uk-search uk-search-default uk-width-large">
               <span class="uk-search-icon-flip" uk-search-icon></span>
-              <input [(ngModel)]="search" class="uk-search-input" type="search" placeholder="Pesquisar">
+              <input [(ngModel)]="search" name="search" class="uk-search-input" type="search" placeholder="Pesquisar">
             </form>
           </div>
         </div>
 
 
         <ul class="collapsible popout">
-          <ng-container *ngFor="let desafio of desafios | async | filterBy: ['emaildemandante']: userEmail | filterBy: ['status']: status
+          <ng-container
+            *ngFor="let desafio of desafios | async | filterBy: ['emaildemandante']: userEmail | filterBy: ['status']: status
             | filterBy: ['status', 'nome', 'demandante', 'resumo', 'area']: search | filterBy: ['area']: area | filterBy: ['remunerado']: remunerado">
             <li *ngIf="!solucoesFilter">
-              <div [ngClass]="{'green lighten-1 white-text': desafio.status == 'concluído'}" (click)="reInitMaterialize()"
-                class="collapsible-header">
-                <i *ngIf="desafio.status == 'concluído'" style="margin-right:20px" class="tiny material-icons white-text">done</i>
+              <div [ngClass]="{'green lighten-1 white-text': desafio.status == 'concluído'}"
+                (click)="reInitMaterialize()" class="collapsible-header">
+                <i *ngIf="desafio.status == 'concluído'" style="margin-right:20px"
+                  class="tiny material-icons white-text">done</i>
                 {{desafio.nome}}
 
                 <div class="row"></div>
-                <span><i [ngClass]="{'white-text': desafio.status == 'concluído'}" class="red-text material-icons">access_time</i></span>Prazo
+                <span><i [ngClass]="{'white-text': desafio.status == 'concluído'}"
+                    class="red-text material-icons">access_time</i></span>Prazo
                 para Submissão
                 {{desafio.prazo.toDate().toLocaleDateString('pt-BR')}} às
                 {{desafio.prazo.toDate().toLocaleTimeString('pt-BR')}}
               </div>
               <div style="position: relative" class="collapsible-body">
-                <a style="margin-right:20px" (click)="findOne(desafio.id)" *ngIf="desafio.emaildemandante === user.email && desafio.status != 'concluído'"
-                  class="btn-floating btn-small waves-effect waves-light blue modal-trigger" href="#modalEdit"><i class="material-icons">edit</i></a>
-                <a (click)="findOne(desafio.id)" *ngIf="desafio.emaildemandante === user.email" style="margin-right:20px"
-                  class="btn-floating btn-small waves-effect waves-light red modal-trigger" href="#modalDelete"><i
-                    class="tiny material-icons">delete</i></a>
-                <a (click)="findOne(desafio.id)" *ngIf="desafio.emaildemandante === user.email && desafio.status != 'concluído'"
+                <a style="margin-right:20px" (click)="findOne(desafio.id)"
+                  *ngIf="desafio.emaildemandante === user.email && desafio.status != 'concluído'"
+                  class="btn-floating btn-small waves-effect waves-light blue modal-trigger" href="#modalEdit"><i
+                    class="material-icons">edit</i></a>
+                <a (click)="findOne(desafio.id)" *ngIf="desafio.emaildemandante === user.email"
+                  style="margin-right:20px" class="btn-floating btn-small waves-effect waves-light red modal-trigger"
+                  href="#modalDelete"><i class="tiny material-icons">delete</i></a>
+                <a (click)="findOne(desafio.id)"
+                  *ngIf="desafio.emaildemandante === user.email && desafio.status != 'concluído'"
                   class="btn-floating btn-small waves-effect waves-light green modal-trigger" href="#modalComplete"><i
                     class="tiny material-icons">done</i></a>
 
@@ -83,16 +95,21 @@
                 <p><b class="blue-text text-darken-3">Resumo:</b> {{desafio.resumo}}</p>
                 <p><b class="blue-text text-darken-3">Remuneração:</b> {{desafio.remunerado}}</p>
 
-                <a (click)="getDesafioId(desafio.id)" style="position: absolute; right:10px; bottom:10px;" *ngIf="desafio.emaildemandante !== user.email && desafio.status != 'concluído' && user.profile != 'Demandante' && !(solucoesArray.includes(desafio.id))"
-                  class="waves-effect waves-light btn modal-trigger light-blue darken-2" href="#modalSolver"><i class="material-icons left">send</i>Solucionar</a>
-                <a (click)="findOneSolver(desafio.id)" style="position: absolute; right:10px; bottom:10px;" *ngIf="desafio.emaildemandante !== user.email && user.profile != 'Demandante' && solucoesArray.includes(desafio.id)"
-                  class="waves-effect waves-light btn modal-trigger yellow darken-3" href="#modalSeeSolver"><i class="material-icons left">remove_red_eye</i>Ver
+                <a (click)="getDesafioId(desafio.id)" style="position: absolute; right:10px; bottom:10px;"
+                  *ngIf="desafio.emaildemandante !== user.email && desafio.status != 'concluído' && user.profile != 'Demandante' && !(solucoesArray.includes(desafio.id))"
+                  class="waves-effect waves-light btn modal-trigger light-blue darken-2" href="#modalSolver"><i
+                    class="material-icons left">send</i>Solucionar</a>
+                <a (click)="findOneSolver(desafio.id)" style="position: absolute; right:10px; bottom:10px;"
+                  *ngIf="desafio.emaildemandante !== user.email && user.profile != 'Demandante' && solucoesArray.includes(desafio.id)"
+                  class="waves-effect waves-light btn modal-trigger yellow darken-3" href="#modalSeeSolver"><i
+                    class="material-icons left">remove_red_eye</i>Ver
                   Sua Solução</a>
 
                 <ul class="collapsible">
                   <ng-container *ngFor="let solucao of solucoes | async">
                     <li *ngIf="desafio.id == solucao.idDesafio && desafio.emaildemandante == user.email">
-                      <div class="collapsible-header amber lighten-2"><i class="material-icons">lightbulb_outline</i>Solução
+                      <div class="collapsible-header amber lighten-2"><i
+                          class="material-icons">lightbulb_outline</i>Solução
                         do
                         {{solucao.solver}} - {{solucao.emailsolver}}</div>
                       <div class="collapsible-body">
@@ -115,10 +132,12 @@
             <li>
               <a class="uk-accordion-title" href="#">Item 1</a>
               <div class="uk-accordion-content">
-                <a href="" class="uk-icon-button uk-margin-right" uk-icon="pencil" title="Editar Desafio" uk-toggle="target: #modal-criar-novo"></a>
-                <a href="" class="uk-icon-button uk-margin-right" uk-icon="trash" uk-toggle="target: #modal-deletar-desafio"
-                  title="Deletar Desafio"></a>
-                <a href="" class="uk-icon-button uk-margin-right" uk-icon="check" title="Concluir Desafio" uk-toggle="target: #modal-concluir-desafio"></a>
+                <a href="" class="uk-icon-button uk-margin-right" uk-icon="pencil" title="Editar Desafio"
+                  uk-toggle="target: #modal-criar-novo"></a>
+                <a href="" class="uk-icon-button uk-margin-right" uk-icon="trash"
+                  uk-toggle="target: #modal-deletar-desafio" title="Deletar Desafio"></a>
+                <a href="" class="uk-icon-button uk-margin-right" uk-icon="check" title="Concluir Desafio"
+                  uk-toggle="target: #modal-concluir-desafio"></a>
 
                 <p><b>Demandante:</b>{{desafio.demandante}}</p>
                 <p><b>Email do Demandante:</b>{{desafio.emaildemandante}}</p>
@@ -126,10 +145,14 @@
                 <p><b>Resumo:</b>{{desafio.resumo}}</p>
                 <p><b>Remuneração:</b>{{desafio.remunerado}}</p>
 
-                <a (click)="getDesafioId(desafio.id)" style="position: absolute; right:10px; bottom:10px;" *ngIf="desafio.emaildemandante !== user.email && desafio.status != 'concluído' && user.profile != 'Demandante' && !(solucoesArray.includes(desafio.id))"
-                  class="waves-effect waves-light btn modal-trigger light-blue darken-2" href="#modalSolver"><i>send</i>Solucionar</a>
-                <a (click)="findOneSolver(desafio.id)" style="position: absolute; right:10px; bottom:10px;" *ngIf="desafio.emaildemandante !== user.email && user.profile != 'Demandante' && solucoesArray.includes(desafio.id)"
-                  class="waves-effect waves-light btn modal-trigger yellow darken-3" href="#modalSeeSolver"><i>remove_red_eye</i>Ver
+                <a (click)="getDesafioId(desafio.id)" style="position: absolute; right:10px; bottom:10px;"
+                  *ngIf="desafio.emaildemandante !== user?.email && desafio.status != 'concluído' && user?.profile != 'Demandante' && !(solucoesArray.includes(desafio.id))"
+                  class="waves-effect waves-light btn modal-trigger light-blue darken-2"
+                  href="#modalSolver"><i>send</i>Solucionar</a>
+                <a (click)="findOneSolver(desafio.id)" style="position: absolute; right:10px; bottom:10px;"
+                  *ngIf="desafio.emaildemandante !== user?.email && user?.profile != 'Demandante' && solucoesArray.includes(desafio.id)"
+                  class="waves-effect waves-light btn modal-trigger yellow darken-3"
+                  href="#modalSeeSolver"><i>remove_red_eye</i>Ver
                   Sua Solução</a>
 
               </div>
@@ -150,16 +173,25 @@
 
     <div uk-grid>
       <div class="uk-width-1-1">
-        <input class="uk-input" type="text" placeholder="Nome do Desafio">
+        <input class="uk-input" [(ngModel)]="desafio.nome" type="text" placeholder="Nome do Desafio">
       </div>
       <div class="uk-width-1-3">
-        <input class="uk-input" type="text" placeholder="Área do Desafio">
+
+        <select name="area2" (ngModel)="desafio.area" class="uk-select">
+          <option [ngValue]="null" disabled selected>Seleciona a Área</option>
+          <option *ngFor="let area of areaoptions | async" [ngValue]="area.nome">
+            {{ area.nome }}
+          </option>
+        </select>
       </div>
       <div class="uk-width-1-3">
-        <input class="uk-input" type="date" placeholder="Prazo do Desafio (Data)">
+        <angular2-date-picker class="uk-input" [(ngModel)]="date" [settings]="settings"></angular2-date-picker>
+        <!--<input type="date" placeholder="Prazo Data" class="uk-input"/>-->
+
       </div>
       <div class="uk-width-1-3">
-        <input class="uk-input" type="date" placeholder="Prazo do Desafio (Hora)">
+        <input class="uk-input" placeholder="Prazo Hora" [ngxTimepicker]="picker">
+        <ngx-material-timepicker #picker></ngx-material-timepicker>
       </div>
 
       <div>
@@ -178,7 +210,8 @@
       </div>
 
       <div class="uk-width-1-1">
-        <textarea id="resumo" class="uk-textarea" name="resumo" required="" aria-required="true" placeholder="Resumo do Desafio"></textarea>
+        <textarea id="resumo" class="uk-textarea" name="resumo" required="" aria-required="true"
+          placeholder="Resumo do Desafio"></textarea>
       </div>
 
     </div>
@@ -222,7 +255,8 @@
       <h2 class="uk-modal-title ap-title">Confirmação</h2>
     </div>
     <div class="uk-modal-body">
-      <p>Tem certeza que deseja marcar este desafio como concluído? Não será mais possível receber soluções para ele.</p>
+      <p>Tem certeza que deseja marcar este desafio como concluído? Não será mais possível receber soluções para ele.
+      </p>
     </div>
 
     <div class="uk-modal-footer uk-text-right">
@@ -232,7 +266,7 @@
 
   </div>
 </div>
-
+<!--
 <div class="container">
   <div style="margin-bottom: 0" class="row">
     <h4 class="font-bold blue-text text-darken-3">Desafios
@@ -372,8 +406,8 @@
     </ng-container>
   </ul>
 </div>
-
-<!-- Modal Create Desafio -->
+-->
+<!-- Modal Create Desafio 
 <div id="modal1" class="modal">
   <div class="modal-content">
     <h4>Criar Novo Desafio</h4>
@@ -431,7 +465,7 @@
     <a style="margin-right:20px" class="waves-effect waves-light btn red modal-close">Cancelar</a>
     <a class="waves-effect waves-light btn green" (click)="createDesafio()">Criar</a>
   </div>
-</div>
+</div>-->
 
 <!-- Modal Delete Desafio -->
 <div id="modalDelete" class="modal">
@@ -445,7 +479,7 @@
   </div>
 </div>
 
-<!-- Modal Edit Desafio -->
+<!-- Modal Edit Desafio 
 <div id="modalEdit" class="modal">
   <div class="modal-content">
     <h4>Editar Desafio</h4>
@@ -502,9 +536,9 @@
     <a style="margin-right:20px" class="waves-effect waves-light btn red modal-close">Cancelar</a>
     <a class="waves-effect waves-light btn green" (click)="editDesafio()">Editar</a>
   </div>
-</div>
+</div>-->
 
-<!-- Modal Solução -->
+<!-- Modal Solução
 <div id="modalSolver" class="modal">
   <div class="modal-content">
     <h4>Enviar Solução</h4>
@@ -522,9 +556,9 @@
     <a style="margin-right:20px" class="waves-effect waves-light btn red modal-close">Cancelar</a>
     <a class="waves-effect waves-light btn green" (click)="enviarSolver()">Enviar</a>
   </div>
-</div>
+</div> -->
 
-<!-- Modal Ver Solução -->
+<!-- Modal Ver Solução
 <div id="modalSeeSolver" class="modal">
   <div class="modal-content">
     <h4>Solução Enviada</h4>
@@ -535,9 +569,9 @@
   <div class="modal-footer">
     <a class="waves-effect waves-light btn red modal-close">Sair</a>
   </div>
-</div>
+</div> -->
 
-<!-- Modal Desafio Complete -->
+<!-- Modal Desafio Complete 
 <div id="modalComplete" class="modal">
   <div class="modal-content">
     <h4>Confirmação</h4>
@@ -547,4 +581,4 @@
     <a style="margin-right:20px" class="waves-effect waves-light btn red modal-close">Não concluir</a>
     <a class="waves-effect waves-light btn green" (click)="completeDesafio()">Concluir</a>
   </div>
-</div>
+</div>-->

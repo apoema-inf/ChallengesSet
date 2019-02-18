@@ -39,8 +39,10 @@ body {
   }
 }
 
-.uk-open {
-  color: $color-white !important;
+.uk-select {
+  option {
+    font-size: .8em !important;
+  }
 }
 
 #icon-user {
