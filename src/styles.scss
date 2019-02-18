@@ -121,7 +121,7 @@ body {
 .white-text {
   color: $color-white;
   font-weight: bold;
-  font-size: 1.5vw;
+  font-size: 1.1em;
 }
 
 .ap-title {
@@ -129,8 +129,21 @@ body {
   font-size: 1.5em;
 }
 
+.row-btn-toggle {
+  margin: 0;
+  background-color: $color-navbar;
+}
+
+.btn-toggle {
+  border: none;
+}
+
 @media screen and (max-width: 500px) {
   .merge div {
     margin-right: 13px;
   }
+}
+
+.uk-list li {
+  color: $color-text-footer;
 }
