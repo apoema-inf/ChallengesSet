@@ -1,52 +1,54 @@
-<nav class="uk-navbar-container navbar  uk-visible@m" uk-navbar>
-  <div class="uk-navbar-left">
+<div uk-sticky>
+  <nav class="uk-navbar-container navbar  uk-visible@m" uk-navbar>
+    <div class="uk-navbar-left">
 
-    <ul class="uk-navbar-nav">
-      <li class="uk-active"><a href="#" class="brand-logo"><img src="assets/images/logo-charset.png"></a></li>
-    </ul>
+      <ul class="uk-navbar-nav">
+        <li class="uk-active"><a href="#" class="brand-logo"><img src="assets/images/logo-charset.png"></a></li>
+      </ul>
 
-  </div>
-  <div class="uk-navbar-center">
+    </div>
+    <div class="uk-navbar-center">
 
-    <ul class="uk-navbar-nav">
-      <li><a href="#" routerLink="/home" routerLinkActive="active">Home</a></li>
+      <ul class="uk-navbar-nav">
+        <li><a href="#" routerLink="/home" routerLinkActive="active">Home</a></li>
 
-      <li>
-        <a href="#" routerLink="/desafios" routerLinkActive="active">Desafios</a>
-      </li>
-      <li>
-        <a href="#" routerLink="/solucionadores" routerLinkActive="active">Solucionadores</a>
-      </li>
-      <li>
-        <a href="#" routerLink="/demandantes" routerLinkActive="active">Demandantes</a>
-      </li>
-    </ul>
+        <li>
+          <a href="#" routerLink="/desafios" routerLinkActive="active">Desafios</a>
+        </li>
+        <li>
+          <a href="#" routerLink="/solucionadores" routerLinkActive="active">Solucionadores</a>
+        </li>
+        <li>
+          <a href="#" routerLink="/demandantes" routerLinkActive="active">Demandantes</a>
+        </li>
+      </ul>
 
-  </div>
-  <div *ngIf="authService.userObservable | async" class="uk-navbar-right">
+    </div>
+    <div *ngIf="authService.userObservable | async" class="uk-navbar-right">
 
-    <ul class="uk-navbar-nav">
-      <li>
-        <a id="icon-user" href="" uk-icon="icon: user"></a>
-        <div class="uk-navbar-dropdown">
-          <ul class="uk-nav uk-navbar-dropdown-nav">
-            <li><a href="#" routerLink="/minha-conta">Minha Conta</a></li>
-            <li><a href="#" (click)="logout()">Logout</a></li>
-          </ul>
-        </div>
-      </li>
-    </ul>
-  </div>
-</nav>
+      <ul class="uk-navbar-nav">
+        <li>
+          <a id="icon-user" href="" uk-icon="icon: user"></a>
+          <div class="uk-navbar-dropdown">
+            <ul class="uk-nav uk-navbar-dropdown-nav">
+              <li><a href="#" routerLink="/minha-conta">Minha Conta</a></li>
+              <li><a href="#" (click)="logout()">Logout</a></li>
+            </ul>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </nav>
+</div>
 
-<a href="#offcanvas-slide" class="uk-button uk-button-default uk-hidden@m" uk-toggle><span uk-icon="icon: menu"></span>
-</a>
+<a href="#offcanvas-slide" class="btn-toggle uk-button uk-button-default uk-hidden@m" uk-toggle><span
+    uk-icon="icon: menu"></span></a>
 
 <div id="offcanvas-slide" uk-offcanvas>
   <div class="uk-offcanvas-bar">
 
     <ul class="uk-nav uk-nav-default">
-      <li><a href="#" routerLink="/home" >Home</a></li>
+      <li><a href="#" routerLink="/home">Home</a></li>
 
       <li>
         <a href="#" routerLink="/desafios">Desafios</a>
@@ -58,6 +60,8 @@
         <a href="#" routerLink="/demandantes">Demandantes</a>
       </li>
     </ul>
+
+    <button class="uk-offcanvas-close" type="button" uk-close></button>
 
   </div>
 </div>
