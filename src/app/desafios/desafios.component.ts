@@ -20,11 +20,11 @@ export class DesafiosComponent implements OnInit {
 
   date: Date = new Date();
   settings = {
-    bigBanner: false,
-    timePicker: false,
-    format: 'dd-MM-yyyy',
-    defaultOpen: false
-  }  
+    bigBanner: true,
+    timePicker: true,
+    format: 'dd-MMM-yyyy hh:mm a z-0300',
+    defaultOpen: false,
+  }
   desafios: Observable<Desafio[]>;
   area2: string = "";
   solucoes: Observable<Solver[]>;

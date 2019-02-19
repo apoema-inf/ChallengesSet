@@ -46,7 +46,7 @@ body {
 }
 
 #icon-user {
-  
+
   &:hover {
     color: $color-white;
   }
@@ -148,4 +148,14 @@ body {
 
 .uk-list li {
   color: $color-text-footer;
+}
+
+.wc-date-container[_ngcontent-c4] {
+  border: 1px solid #e5e5e5 !important;
+  padding: 9px !important;
+  height: 42px !important;
+}
+
+.wc-date-container[_ngcontent-c4] > span[_ngcontent-c4] {
+  color: #666 !important;
 }
