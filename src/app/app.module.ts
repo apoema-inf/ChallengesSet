@@ -24,6 +24,8 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { FooterComponent } from './footer/footer.component';
 import { AngularDateTimePickerModule } from 'angular2-datetimepicker';
 
+import { Ng2FlatpickrModule } from 'ng2-flatpickr';
+
 
 //import { AuthService } from './auth.service';
 const appRoutes: Routes = [
@@ -93,7 +95,8 @@ const appRoutes: Routes = [
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,
     AngularFirestoreModule,
-    AngularDateTimePickerModule
+    AngularDateTimePickerModule,
+    Ng2FlatpickrModule
   ],
   providers: [AuthService, AuthGuard],
   bootstrap: [AppComponent]

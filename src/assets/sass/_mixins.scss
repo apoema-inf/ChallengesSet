@@ -9,3 +9,11 @@
   font-size: 1em;
   color: $color-white;
 }
+
+@mixin bg-icons($color) {
+  text-decoration-color: white;
+  background-color: $color;
+  i {
+    color: white;
+  }
+}

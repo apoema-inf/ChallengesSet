@@ -1,3 +1,6 @@
+@import '../../assets/sass/mixins';
+@import '../../assets/sass/variables';
+
 .uk-button {
   &:hover {
     border-radius: 20px;  }
@@ -16,4 +19,40 @@
 
 .uk-accordion-title {
   padding: 10px !important;
+}
+
+.uk-accordion-content {
+  padding-left:10px;
+  padding-bottom:10px;
+  .icon-green {
+    @include bg-icons(green);
+  }
+  .icon-red {
+    @include bg-icons(red);
+  }
+  .icon-blue {
+    @include bg-icons(blue);
+  }
+  b {
+    color: $color-navbar;
+  }
+}
+
+.bg-yelllow {
+  padding: 15px;
+  background-color: orange;
+  color: white;
+  i {
+    color: white;
+  }
+}
+
+.uk-align-right {
+  margin: 0;
+  font-size: .7em;
+  line-height: 2.0;
+}
+
+input[type="text"] {
+  width: 100% !important;
 }

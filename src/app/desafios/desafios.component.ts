@@ -8,8 +8,14 @@ import * as firebase from 'firebase';
 import { Area } from '../models/area.model';
 import { AuthService } from '../services/auth.service';
 import { Moment } from 'moment';
+import { FlatpickrOptions } from 'ng2-flatpickr';
+import confirmDatePlugin from 'flatpickr/dist/plugins/confirmDate/confirmDate';
+
+import Brazilian from 'flatpickr/dist/l10n/pt.js';
+import { NotifyService } from '../services/notify.service';
 
 declare var $: any;
+declare var UIkit: any;
 
 @Component({
   selector: 'app-desafios',
@@ -33,7 +39,7 @@ export class DesafiosComponent implements OnInit {
   user: any;
   desafio: Desafio = new Desafio();
   hora: string;
-  prazo: string;
+  prazo: string = "";
   found: Desafio = new Desafio();
   solver: Solver = new Solver();
   solverFound: Solver = new Solver();
@@ -43,13 +49,28 @@ export class DesafiosComponent implements OnInit {
   search: string = '';
   area: string = '';
   remunerado: string = '';
+  desafioExcluir: any;
+  flagEditar: boolean;
+  tituloModal: string = 'Criar Novo Desafio';
 
-  constructor(private db: AngularFirestore, private authService: AuthService) {
+  exampleOptions: FlatpickrOptions;
+  constructor(private db: AngularFirestore, private authService: AuthService, private notifyService: NotifyService) {
+
 
     var that = this;
     authService.getUser().then(function (user) {
       that.user = user;
     })
+
+    this.exampleOptions = {
+      locale: Brazilian.pt,
+      enableTime: true,
+      dateFormat: "d/m/Y H:i",
+      plugins: [confirmDatePlugin({})],
+      onChange(selectedDates) {
+        that.desafio.prazo = selectedDates[0].toLocaleString('pt-BR');
+      }
+    };
     this.desafios = db.collection('desafios').snapshotChanges().pipe(map(
 
       changes => {
@@ -108,6 +129,10 @@ export class DesafiosComponent implements OnInit {
   ngOnInit() {
   }
 
+  setDesafioExcluir(id) {
+    this.desafioExcluir = id;
+  }
+
   setUserEmail() {
     this.cleanFilters();
     this.userEmail = this.user.email;
@@ -126,9 +151,16 @@ export class DesafiosComponent implements OnInit {
     this.remunerado = '';
   }
 
+  toggleEditar() {
+    (document.getElementById("nao") as HTMLInputElement).checked = true;
+    this.flagEditar = false;
+    this.tituloModal = 'Criar Novo Desafio';
+    this.desafio = new Desafio();
+  }
+
   createDesafio() {
-    this.desafio.prazo = $('#prazo').datepicker().val();
-    this.hora = $('#h').timepicker().val();
+    $.LoadingOverlay("show");
+
     if (this.desafio.remunerado != "Sim") {
       this.desafio.remunerado = "Não";
     }
@@ -136,22 +168,16 @@ export class DesafiosComponent implements OnInit {
     if (this.desafio.nome == (null || '' || undefined) ||
       this.desafio.prazo == (null || '' || undefined) ||
       this.desafio.area == (null || '' || undefined) ||
-      this.hora == (null || '' || undefined) ||
       this.desafio.resumo == (null || '' || undefined)) {
+      this.notifyService.criarNotificacao("Informe os campos", "warning");
+      $.LoadingOverlay("hide");
       return;
     }
-
-    var dateParts = this.desafio.prazo.split("/");
-    var timeParts = this.hora.split(':');
-    var timePartsWithoutPM = timeParts[1].split(' ');
-
-    // month is 0-based, that's why we need dataParts[1] - 1
-    var dateObject = new Date(+dateParts[2], dateParts[1] - 1, +dateParts[0], +timeParts[0], +timePartsWithoutPM[0]);
 
     this.db.collection("desafios").add({
       nome: this.desafio.nome,
       demandante: this.user.nome,
-      prazo: dateObject,
+      prazo: this.desafio.prazo,
       resumo: this.desafio.resumo,
       area: this.desafio.area,
       emaildemandante: this.user.email,
@@ -159,28 +185,33 @@ export class DesafiosComponent implements OnInit {
       remunerado: this.desafio.remunerado
     })
       .then(function () {
-        $('#modal1').modal('close');
-        (document.getElementById('myForm') as HTMLFormElement).reset();
+        UIkit.modal('#modal-criar-novo').hide();
+        $.LoadingOverlay("hide");
       })
       .catch(function () {
+        $.LoadingOverlay("hide");
       });
 
   }
 
   findOne(desafioId) {
     var that = this;
+    this.flagEditar = true;
+    if (this.flagEditar) {
+      this.tituloModal = 'Editar Desafio';
+    }
+
     this.db.collection("desafios").doc(desafioId)
       .get().toPromise().then(function (doc) {
         if (doc.exists) {
-          that.found.demandante = doc.data().demandante;
-          that.found.emaildemandante = doc.data().emaildemandante;
-          that.found.resumo = doc.data().resumo;
-          that.found.area = doc.data().area;
-          that.found.nome = doc.data().nome;
-          that.prazo = doc.data().prazo.toDate().toLocaleDateString('pt-BR');
-          that.hora = doc.data().prazo.toDate().toLocaleTimeString('pt-BR');
-          that.found.id = doc.id;
-          that.found.status = doc.data().status;
+          that.desafio.demandante = doc.data().demandante;
+          that.desafio.emaildemandante = doc.data().emaildemandante;
+          that.desafio.resumo = doc.data().resumo;
+          that.desafio.area = doc.data().area;
+          that.desafio.nome = doc.data().nome;
+          that.desafio.prazo = doc.data().prazo;
+          that.desafio.id = doc.id;
+          that.desafio.status = doc.data().status;
         } else {
           // doc.data() will be undefined in this case
           console.log("No such document!");
@@ -191,39 +222,36 @@ export class DesafiosComponent implements OnInit {
   }
 
   deleteDesafio() {
-    this.db.collection("desafios").doc(this.found.id).delete().then(function () {
-      $('#modalDelete').modal('close');
+    var that = this;
+    this.db.collection("desafios").doc(this.desafioExcluir).delete().then(function () {
+      that.notifyService.criarNotificacao("Desafio deletado com sucesso.", "success");
+      UIkit.modal('#modal-deletar-desafio').hide();
     }).catch(function () {
+      that.notifyService.criarNotificacao("Ocorreu um erro ao excluir o desafio", "danger");
+      UIkit.modal('#modal-deletar-desafio').hide();
     });
   }
 
   editDesafio() {
+    var that = this;
 
-    this.prazo = $('#prazoEdit').datepicker().val();
-    this.hora = $('#hEdit').timepicker().val();
-    if (this.found.remunerado != "Sim") {
-      this.found.remunerado = "Não";
+    if (this.desafio.remunerado != "Sim") {
+      this.desafio.remunerado = "Não";
     }
 
-    var dateParts = this.prazo.split("/");
-    var timeParts = this.hora.split(':');
-    var timePartsWithoutPM = timeParts[1].split(' ');
-
-    // month is 0-based, that's why we need dataParts[1] - 1
-    var dateObject = new Date(+dateParts[2], +dateParts[1] - 1, +dateParts[0], +timeParts[0], +timePartsWithoutPM[0]);
-
-    this.db.collection("desafios").doc(this.found.id)
+    this.db.collection("desafios").doc(this.desafio.id)
       .update({
-        nome: this.found.nome,
+        nome: this.desafio.nome,
         demandante: this.user.nome,
-        prazo: dateObject,
-        resumo: this.found.resumo,
-        area: this.found.area,
+        prazo: this.desafio.prazo,
+        resumo: this.desafio.resumo,
+        area: this.desafio.area,
         emaildemandante: this.user.email,
-        remunerado: this.found.remunerado
+        remunerado: this.desafio.remunerado
       })
       .then(function () {
-        $('#modalEdit').modal('close');
+        that.notifyService.criarNotificacao("Desafio editado com sucesso.", "success");
+        UIkit.modal('#modal-criar-novo').hide();
       })
       .catch(function () {
         // The document probably doesn't exist.
@@ -303,8 +331,5 @@ export class DesafiosComponent implements OnInit {
     this.area = string;
   }
 
-  reInitMaterialize() {
-
-  }
 }
 
