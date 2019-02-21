@@ -103,7 +103,7 @@
                   Solucionar</a>
                 <a class="uk-button uk-button-primary" uk-toggle="target: #modal-criar-novo"
                   (click)="findOneSolver(desafio.id)"
-                  *ngIf="desafio.emaildemandante !== user.email && user.profile != 'Demandante' && solucoesArray.includes(desafio.id)"><i
+                  *ngIf="desafio.emaildemandante !== user?.email && user?.profile != 'Demandante' && solucoesArray.includes(desafio.id)"><i
                     class="far fa-eye uk-margin-right"></i>Ver Sua Solução</a>
               </div>
             </li>
@@ -145,7 +145,7 @@
           </ng2-flatpickr>
           <ng-template #create>
             <ng2-flatpickr id="prazo" name="prazo" [config]="exampleOptions"
-              placeholder="Selecione o Prazo para submissão" #prazo>
+              placeholder="Selecione o Prazo para submissão">
             </ng2-flatpickr>
           </ng-template>
 
