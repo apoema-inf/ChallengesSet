@@ -118,7 +118,7 @@
 <!--Modal Criar Novo / Editar Desafio-->
 <div id="modal-criar-novo" uk-modal>
   <div style="width: 800px;" class="uk-modal-dialog uk-modal-body">
-    <form id="createForm" #createForm="ngForm" (ngSubmit)="createDesafio(createForm)">
+    <form id="createForm" #createForm="ngForm">
       <button class="uk-modal-close-default" type="button" uk-close></button>
       <h2 class="uk-modal-title ap-title">{{tituloModal}}</h2>
 
@@ -131,12 +131,13 @@
         </div>
 
         <div class="uk-width-1-2">
-          <select id="selectArea" name="area" [(ngModel)]="desafio.area" class="uk-select">
+          <select [class.border-red]="!area.value && area.touched" id="selectArea" name="area" [(ngModel)]="desafio.area" class="uk-select" #area="ngModel">
             <option [ngValue]="default" [selected]="true" [disabled]="true">Selecione a Área</option>
             <option *ngFor="let area of areaoptions | async" [ngValue]="area.nome" [selected]="Selecione">
               {{ area.nome }}
             </option>
           </select>
+          <span class="uk-text-small" *ngIf="!area.value && area.touched">Área é obrigatório</span>
         </div>
         <div class="uk-width-1-2">
           <ng2-flatpickr *ngIf="flagEditar; else create" id="prazo" name="prazo" [config]="exampleOptions"
@@ -144,7 +145,7 @@
           </ng2-flatpickr>
           <ng-template #create>
             <ng2-flatpickr id="prazo" name="prazo" [config]="exampleOptions"
-              placeholder="Selecione o Prazo para submissão">
+              placeholder="Selecione o Prazo para submissão" #prazo>
             </ng2-flatpickr>
           </ng-template>
 
@@ -157,8 +158,9 @@
         </div>
 
         <div class="uk-width-1-1">
-          <textarea id="resumo" class="uk-textarea" name="resumo" required [(ngModel)]="desafio.resumo"
-            placeholder="Resumo do Desafio"></textarea>
+          <textarea [class.border-red]="!resumo.valid && resumo.touched" id="resumo" class="uk-textarea" name="resumo" required [(ngModel)]="desafio.resumo"
+            placeholder="Resumo do Desafio" #resumo="ngModel"></textarea>
+            <span class="uk-text-small" *ngIf="!resumo.valid && resumo.touched">Resumo é obrigatório</span>
         </div>
 
       </div>
@@ -166,10 +168,10 @@
 
       <div class="uk-flex uk-flex-right uk-margin-top">
         <div>
-          <button class="uk-button uk-button-primary uk-margin-right" type="submit" *ngIf="!flagEditar; else editar"
-            [disabled]="!(createForm.value.area) || !(createForm.valid)">Criar Desafio</button>
+          <button class="uk-button uk-button-primary uk-margin-right" *ngIf="!flagEditar; else editar"
+            [disabled]="!(createForm.value.area) || !(createForm.valid)" (click)="createDesafio(createForm)">Criar Desafio</button>
           <ng-template #editar>
-            <button class="uk-button uk-button-primary uk-margin-right" type="submit" (click)="editDesafio()">Editar
+            <button class="uk-button uk-button-primary uk-margin-right" (click)="editDesafio(desafio.id)" [disabled]="!(createForm.value.area) || !(createForm.valid)">Editar
               Desafio</button>
           </ng-template>
           <button class="uk-button uk-button-default uk-modal-close" type="button">Cancelar</button>

@@ -179,6 +179,10 @@ textarea {
   color: crimson;
 }
 
+.border-red, .border-red:focus {
+  border: 1px solid red;
+}
+
 .color-success {
   color: $notify-success;
   font-weight: bold;

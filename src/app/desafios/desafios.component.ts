@@ -159,7 +159,7 @@ export class DesafiosComponent implements OnInit {
 
   createDesafio(form) {
 
-    console.log(form.value.remunerado)
+    var that = this;
 
     if(form.value.remunerado == undefined) {
       this.desafio.remunerado = false;
@@ -167,11 +167,8 @@ export class DesafiosComponent implements OnInit {
 
     $.LoadingOverlay("show");
 
-    if (this.desafio.nome == (null || '' || undefined) ||
-      this.desafio.prazo == (null || '' || undefined) ||
-      this.desafio.area == (null || '' || undefined) ||
-      this.desafio.resumo == (null || '' || undefined)) {
-      this.notifyService.criarNotificacao("Informe os campos", "warning");
+    if (this.desafio.prazo == (null || '' || undefined) ) {
+      this.notifyService.criarNotificacao("Informe o Prazo para submissão", "warning");
       $.LoadingOverlay("hide");
       return;
     }
@@ -190,9 +187,11 @@ export class DesafiosComponent implements OnInit {
         UIkit.modal('#modal-criar-novo').hide();
         $.LoadingOverlay("hide");
         (document.getElementById('createForm') as HTMLFormElement).reset();
+        that.notifyService.criarNotificacao("Desafio criado com sucesso.", "success");
       })
       .catch(function () {
         $.LoadingOverlay("hide");
+        that.notifyService.criarNotificacao("Não foi possível criar o desafio.", "danger");
       });
 
   }
@@ -237,10 +236,10 @@ export class DesafiosComponent implements OnInit {
     });
   }
 
-  editDesafio() {
+  editDesafio(id) {
     var that = this;
 
-    this.db.collection("desafios").doc(this.desafio.id)
+    this.db.collection("desafios").doc(id)
       .update({
         nome: this.desafio.nome,
         demandante: this.user.nome,
@@ -253,6 +252,7 @@ export class DesafiosComponent implements OnInit {
       .then(function () {
         that.notifyService.criarNotificacao("Desafio editado com sucesso.", "success");
         UIkit.modal('#modal-criar-novo').hide();
+        (document.getElementById('createForm') as HTMLFormElement).reset();
       })
       .catch(function () {
         // The document probably doesn't exist.
