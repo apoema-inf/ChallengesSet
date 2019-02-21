@@ -25,8 +25,7 @@
                 <li *ngIf="user?.profile !== 'Solucionador'" class="uk-active"><a (click)="setUserEmail()"><i
                       class="fas fa-user uk-margin-right"></i>Meus
                     Desafios</a></li>
-                <li (click)="cleanFilters()" class="uk-active"><a (click)="setUserEmail()"><i
-                      class="fas fa-infinity uk-margin-right"></i>Todos
+                <li (click)="cleanFilters()" class="uk-active"><a><i class="fas fa-infinity uk-margin-right"></i>Todos
                     os Desafios</a></li>
                 <li class="uk-active"><a (click)="setStatus('concluído')"><i
                       class="fas fa-check uk-margin-right"></i>Desafios
@@ -60,7 +59,7 @@
         <div class="uk-width-1-1">
           <ul class="uk-box-shadow-medium" uk-accordion="collapsible: true"
             *ngFor="let desafio of desafios | async | filterBy: ['emaildemandante']: userEmail | filterBy: ['status']: status
-          | filterBy: ['status', 'nome', 'demandante', 'resumo', 'area']: search | filterBy: ['area']: area | filterBy: ['remunerado']: remunerado">
+            | filterBy: ['status', 'nome', 'demandante', 'resumo', 'area']: search | filterBy: ['area']: areaFilter | filterBy: ['remunerado']: remuneradoFilter">
             <li>
               <a class="uk-accordion-title bg-grey"
                 [ngClass]="{'bg-green accordion-text': desafio.status == 'concluído'}" href="#">{{desafio.nome}} <span
@@ -73,7 +72,8 @@
                 <a href="" class="uk-icon-button uk-margin-right icon-red" uk-toggle="target: #modal-deletar-desafio"
                   title="Deletar Desafio" (click)="setDesafioExcluir(desafio.id)"><i class="far fa-trash-alt"></i></a>
                 <a href="" class="uk-icon-button uk-margin-right icon-green" title="Concluir Desafio"
-                  uk-toggle="target: #modal-concluir-desafio"><i class="fas fa-check"></i></a>
+                  uk-toggle="target: #modal-concluir-desafio" (click)="findOne(desafio.id)"><i
+                    class="fas fa-check"></i></a>
 
                 <p><b>Demandante: </b>{{desafio.demandante}}</p>
                 <p><b>Email do Demandante: </b>{{desafio.emaildemandante}}</p>
@@ -108,6 +108,7 @@
               </div>
             </li>
           </ul>
+
         </div>
 
       </div>
@@ -131,7 +132,8 @@
         </div>
 
         <div class="uk-width-1-2">
-          <select [class.border-red]="!area.value && area.touched" id="selectArea" name="area" [(ngModel)]="desafio.area" class="uk-select" #area="ngModel">
+          <select [class.border-red]="!area.value && area.touched" id="selectArea" name="area"
+            [(ngModel)]="desafio.area" class="uk-select" #area="ngModel">
             <option [ngValue]="default" [selected]="true" [disabled]="true">Selecione a Área</option>
             <option *ngFor="let area of areaoptions | async" [ngValue]="area.nome" [selected]="Selecione">
               {{ area.nome }}
@@ -158,9 +160,9 @@
         </div>
 
         <div class="uk-width-1-1">
-          <textarea [class.border-red]="!resumo.valid && resumo.touched" id="resumo" class="uk-textarea" name="resumo" required [(ngModel)]="desafio.resumo"
-            placeholder="Resumo do Desafio" #resumo="ngModel"></textarea>
-            <span class="uk-text-small" *ngIf="!resumo.valid && resumo.touched">Resumo é obrigatório</span>
+          <textarea [class.border-red]="!resumo.valid && resumo.touched" id="resumo" class="uk-textarea" name="resumo"
+            required [(ngModel)]="desafio.resumo" placeholder="Resumo do Desafio" #resumo="ngModel"></textarea>
+          <span class="uk-text-small" *ngIf="!resumo.valid && resumo.touched">Resumo é obrigatório</span>
         </div>
 
       </div>
@@ -169,9 +171,11 @@
       <div class="uk-flex uk-flex-right uk-margin-top">
         <div>
           <button class="uk-button uk-button-primary uk-margin-right" *ngIf="!flagEditar; else editar"
-            [disabled]="!(createForm.value.area) || !(createForm.valid)" (click)="createDesafio(createForm)">Criar Desafio</button>
+            [disabled]="!(createForm.value.area) || !(createForm.valid)" (click)="createDesafio(createForm)">Criar
+            Desafio</button>
           <ng-template #editar>
-            <button class="uk-button uk-button-primary uk-margin-right" (click)="editDesafio(desafio.id)" [disabled]="!(createForm.value.area) || !(createForm.valid)">Editar
+            <button class="uk-button uk-button-primary uk-margin-right" (click)="editDesafio(desafio.id)"
+              [disabled]="!(createForm.value.area) || !(createForm.valid)">Editar
               Desafio</button>
           </ng-template>
           <button class="uk-button uk-button-default uk-modal-close" type="button">Cancelar</button>
@@ -216,7 +220,8 @@
     </div>
 
     <div class="uk-modal-footer uk-text-right">
-      <button class="uk-button uk-button-primary uk-margin-right" type="button" (click)="completeDesafio()">Confirmar
+      <button class="uk-button uk-button-primary uk-margin-right" type="button"
+        (click)="completeDesafio(desafio.id)">Confirmar
         Conclusão</button>
       <button class="uk-button uk-button-default uk-modal-close" type="button">Cancelar</button>
     </div>
@@ -228,16 +233,38 @@
   <div style="width: 500px;" class="uk-modal-dialog uk-modal-body">
     <h2 class="uk-modal-title ap-title">Enviar Solução</h2>
     <button class="uk-modal-close-default" type="button" uk-close></button>
-    <form (keyup.enter)="enviarSolver()">
-      <textarea class="uk-textarea" name="resumo" [(ngModel)]="solver.resumo" placeholder="Resumo da Solução"
-        required="" aria-required="true"></textarea>
+    <form id="solucaoForm" #solucaoForm="ngForm" (keyup.enter)="enviarSolver()">
+      <textarea class="uk-textarea" [class.border-red]="!resumo.valid && resumo.touched" name="resumo"
+        [(ngModel)]="solver.resumo" placeholder="Resumo da Solução" required="" aria-required="true"
+        #resumo="ngModel"></textarea>
+      <span class="uk-text-small" *ngIf="!resumo.valid && resumo.touched">Resumo da solução é obrigatório</span>
     </form>
     <div class="uk-flex uk-flex-right uk-margin-top">
       <div>
-        <button class="uk-button uk-button-primary uk-margin-right" type="button" (click)="enviarSolver()">Criar
-          Desafio</button>
+        <button class="uk-button uk-button-primary uk-margin-right" type="button" (click)="enviarSolver()"
+          [disabled]="!(solucaoForm.valid)">Enviar</button>
         <button class="uk-button uk-button-default uk-modal-close" type="button">Cancelar</button>
       </div>
     </div>
+  </div>
+</div>
+
+<!-- Modal Ver Solução -->
+<div id="modal-ver-solucao" uk-modal>
+  <div class="uk-modal-dialog">
+    <button class="uk-modal-close-default" type="button" uk-close></button>
+
+    <div class="uk-modal-header">
+      <h2 class="uk-modal-title ap-title">Solução Enviada</h2>
+    </div>
+    <div class="uk-modal-body">
+      <p>Enviado em: {{solverFound.sendAt}}</p>
+      <p>{{solverFound.resumo}}</p>
+    </div>
+
+    <div class="uk-modal-footer uk-text-right">
+      <button class="uk-button uk-button-primary uk-modal-close" type="button">Fechar</button>
+    </div>
+
   </div>
 </div>
