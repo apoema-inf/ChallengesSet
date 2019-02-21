@@ -39,7 +39,7 @@
                 <li class="uk-active"><a (click)="setRemunerado()"><i
                       class="fas fa-dollar-sign uk-margin-right"></i>Desafios
                     Remunerados</a></li>
-                <li *ngIf="user?.profile != 'Demandante'" class="uk-active"><a (click)="setSolucoesFilter()"><i
+                <li *ngIf="user?.profile != 'Demandante'" class="uk-active"><a (click)="minhasSolucoes()"><i
                       class="far fa-lightbulb uk-margin-right"></i>Minhas
                     soluções</a></li>
               </ul>
@@ -60,7 +60,7 @@
           <ul class="uk-box-shadow-medium" uk-accordion="collapsible: true"
             *ngFor="let desafio of desafios | async | filterBy: ['emaildemandante']: userEmail | filterBy: ['status']: status
             | filterBy: ['status', 'nome', 'demandante', 'resumo', 'area']: search | filterBy: ['area']: areaFilter | filterBy: ['remunerado']: remuneradoFilter">
-            <li>
+            <li *ngIf="!solucoesFilter">
               <a class="uk-accordion-title bg-grey"
                 [ngClass]="{'bg-green accordion-text': desafio.status == 'concluído'}" href="#">{{desafio.nome}} <span
                   class="uk-align-right"><i class="far fa-clock uk-margin-right"></i>Prazo para Submissão
@@ -101,14 +101,63 @@
                   *ngIf="desafio.emaildemandante !== user?.email && desafio.status != 'concluído' && user?.profile != 'Demandante' && !(solucoesArray.includes(desafio.id))"><span
                     class="uk-margin-right" uk-icon="icon: file-edit"></span>
                   Solucionar</a>
-                <a class="uk-button uk-button-primary" uk-toggle="target: #modal-criar-novo"
-                  (click)="findOneSolver(desafio.id)"
-                  *ngIf="desafio.emaildemandante !== user?.email && user?.profile != 'Demandante' && solucoesArray.includes(desafio.id)"><i
-                    class="far fa-eye uk-margin-right"></i>Ver Sua Solução</a>
+                <a class="uk-button uk-button-primary" (click)="findOneSolver(desafio.id)"
+                  *ngIf="desafio.emaildemandante !== user.email && user.profile != 'Demandante' && solucoesArray.includes(desafio.id)"
+                  uk-toggle="target: #modal-ver-solucao" (click)="findOneSolver(desafio.id)"><i
+                    class="far fa-eye uk-margin-right"></i>Visualizar Solução</a>
               </div>
             </li>
           </ul>
+          <ul class="uk-box-shadow-medium" uk-accordion="collapsible: true"
+          *ngFor="let desafio of desafios | async | filterBy: ['status']: statusConcluido">
+            <li *ngIf="solucoesArray.includes(desafio.id) && solucoesFilter">
+              <a class="uk-accordion-title bg-grey"
+                [ngClass]="{'bg-green accordion-text': desafio.status == 'concluído'}" href="#">{{desafio.nome}} <span
+                  class="uk-align-right"><i class="far fa-clock uk-margin-right"></i>Prazo para Submissão
+                  {{desafio.prazo}}</span></a>
+              <div class="uk-accordion-content">
+                <a href="" class="uk-icon-button uk-margin-right icon-blue" title="Editar Desafio"
+                  uk-toggle="target: #modal-criar-novo" (click)="findOne(desafio.id)"><i
+                    class="fas fa-pencil-alt"></i></a>
+                <a href="" class="uk-icon-button uk-margin-right icon-red" uk-toggle="target: #modal-deletar-desafio"
+                  title="Deletar Desafio" (click)="setDesafioExcluir(desafio.id)"><i class="far fa-trash-alt"></i></a>
+                <a href="" class="uk-icon-button uk-margin-right icon-green" title="Concluir Desafio"
+                  uk-toggle="target: #modal-concluir-desafio" (click)="findOne(desafio.id)"><i
+                    class="fas fa-check"></i></a>
 
+                <p><b>Demandante: </b>{{desafio.demandante}}</p>
+                <p><b>Email do Demandante: </b>{{desafio.emaildemandante}}</p>
+                <p><b>Área do problema: </b>{{desafio.area}}</p>
+                <p><b>Resumo: </b>{{desafio.resumo}}</p>
+                <p><b>Remuneração: </b>{{desafio.remunerado}}</p>
+
+                <ul class="uk-margin-large-right uk-margin-large-left" uk-accordion
+                  *ngFor="let solucao of solucoes | async">
+                  <li *ngIf="desafio.id == solucao.idDesafio && desafio.emaildemandante == user.email">
+                    <a class="uk-accordion-title bg-yelllow" href="#"><i
+                        class="fas fa-lightbulb uk-margin-right"></i>Solução do
+                      {{solucao.solver}} - {{solucao.emailsolver}}</a>
+                    <div class="uk-accordion-content">
+                      <p><b class="blue-text text-darken-3">Enviado em:</b>
+                        {{solucao.sendAt.toDate().toLocaleDateString('pt-BR')}} às
+                        {{solucao.sendAt.toDate().toLocaleTimeString('pt-BR')}}</p>
+                      {{solucao.resumo}}
+                    </div>
+                  </li>
+                </ul>
+
+                <a class="uk-button uk-button-primary" uk-toggle="target: #modal-criar-novo"
+                  (click)="getDesafioId(desafio.id)" uk-toggle="target: #modal-solucao-desafio"
+                  *ngIf="desafio.emaildemandante !== user?.email && desafio.status != 'concluído' && user?.profile != 'Demandante' && !(solucoesArray.includes(desafio.id))"><span
+                    class="uk-margin-right" uk-icon="icon: file-edit"></span>
+                  Solucionar</a>
+                <a class="uk-button uk-button-primary" (click)="findOneSolver(desafio.id)"
+                  *ngIf="desafio.emaildemandante !== user.email && user.profile != 'Demandante' && solucoesArray.includes(desafio.id)"
+                  uk-toggle="target: #modal-ver-solucao" (click)="findOneSolver(desafio.id)"><i
+                    class="far fa-eye uk-margin-right"></i>Visualizar Solução</a>
+              </div>
+            </li>
+          </ul>
         </div>
 
       </div>

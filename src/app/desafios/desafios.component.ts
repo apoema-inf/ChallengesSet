@@ -45,6 +45,8 @@ export class DesafiosComponent implements OnInit {
   solver: Solver = new Solver();
   solverFound: Solver = new Solver();
   solucoesArray: string[] = [''];
+  solucoesFilter: boolean = false;
+  desafiosAux: Observable<Desafio[]>;
   status: string = '';
   search: string = '';
   areaFilter: string = '';
@@ -71,21 +73,8 @@ export class DesafiosComponent implements OnInit {
         that.desafio.prazo = selectedDates[0].toLocaleString('pt-BR');
       }
     };
-    this.desafios = db.collection('desafios').snapshotChanges().pipe(map(
 
-      changes => {
-
-        return changes.map(
-
-          a => {
-
-            const data = a.payload.doc.data() as Desafio;
-
-            data.id = a.payload.doc.id;
-            return data;
-
-          });
-      }));
+    this.initDesafios();
 
     this.solucoes = db.collection('solucoes').snapshotChanges().pipe(map(
 
@@ -129,6 +118,26 @@ export class DesafiosComponent implements OnInit {
   ngOnInit() {
   }
 
+  initDesafios() {
+    this.desafios = this.db.collection('desafios').snapshotChanges().pipe(map(
+
+      changes => {
+
+        return changes.map(
+
+          a => {
+
+            const data = a.payload.doc.data() as Desafio;
+
+            data.id = a.payload.doc.id;
+            return data;
+
+          });
+      }))
+
+    return true;
+  }
+
   setDesafioExcluir(id) {
     this.desafioExcluir = id;
   }
@@ -138,21 +147,12 @@ export class DesafiosComponent implements OnInit {
     this.userEmail = this.user.email;
   }
 
-  setSolucoesFilter() {
-    //this.cleanFilters();
-    var that = this;
-    that.desafios.forEach(element => {
-      element.forEach(desafio => {
-        console.log(desafio);
-      });
-    });
-  }
-
   cleanFilters() {
     this.userEmail = '';
     this.status = '';
     this.areaFilter = '';
     this.remuneradoFilter = null;
+    this.solucoesFilter = false;
   }
 
   toggleEditar() {
@@ -165,13 +165,13 @@ export class DesafiosComponent implements OnInit {
 
     var that = this;
 
-    if(form.value.remunerado == undefined) {
+    if (form.value.remunerado == undefined) {
       this.desafio.remunerado = false;
     }
 
     $.LoadingOverlay("show");
 
-    if (this.desafio.prazo == (null || '' || undefined) ) {
+    if (this.desafio.prazo == (null || '' || undefined)) {
       this.notifyService.criarNotificacao("Informe o Prazo para submissão", "warning");
       $.LoadingOverlay("hide");
       return;
@@ -219,7 +219,7 @@ export class DesafiosComponent implements OnInit {
           that.desafio.id = doc.id;
           that.desafio.status = doc.data().status;
           that.desafio.remunerado = doc.data().remunerado;
-        
+
         } else {
           // doc.data() will be undefined in this case
           console.log("No such document!");
@@ -238,6 +238,11 @@ export class DesafiosComponent implements OnInit {
       that.notifyService.criarNotificacao("Ocorreu um erro ao excluir o desafio", "danger");
       UIkit.modal('#modal-deletar-desafio').hide();
     });
+  }
+
+  minhasSolucoes() {
+    this.cleanFilters();
+    this.solucoesFilter = true;
   }
 
   editDesafio(id) {
