@@ -13,6 +13,7 @@ import confirmDatePlugin from 'flatpickr/dist/plugins/confirmDate/confirmDate';
 
 import Brazilian from 'flatpickr/dist/l10n/pt.js';
 import { NotifyService } from '../services/notify.service';
+import { forEach } from '@angular/router/src/utils/collection';
 
 declare var $: any;
 declare var UIkit: any;
@@ -44,11 +45,10 @@ export class DesafiosComponent implements OnInit {
   solver: Solver = new Solver();
   solverFound: Solver = new Solver();
   solucoesArray: string[] = [''];
-  solucoesFilter: boolean = false;
   status: string = '';
   search: string = '';
-  area: string = '';
-  remunerado: string = '';
+  areaFilter: string = '';
+  remuneradoFilter: boolean;
   desafioExcluir: any;
   flagEditar: boolean;
   tituloModal: string = 'Criar Novo Desafio';
@@ -139,16 +139,20 @@ export class DesafiosComponent implements OnInit {
   }
 
   setSolucoesFilter() {
-    this.cleanFilters();
-    this.solucoesFilter = true;
+    //this.cleanFilters();
+    var that = this;
+    that.desafios.forEach(element => {
+      element.forEach(desafio => {
+        console.log(desafio);
+      });
+    });
   }
 
   cleanFilters() {
     this.userEmail = '';
-    this.solucoesFilter = false;
     this.status = '';
-    this.area = '';
-    this.remunerado = '';
+    this.areaFilter = '';
+    this.remuneradoFilter = null;
   }
 
   toggleEditar() {
@@ -264,11 +268,7 @@ export class DesafiosComponent implements OnInit {
   }
 
   enviarSolver() {
-
-    if (this.solver.resumo == (null || '' || undefined)) {
-      return;
-    }
-
+    var that = this;
     this.db.collection("solucoes")
       .add({
         solver: this.user.nome,
@@ -278,8 +278,9 @@ export class DesafiosComponent implements OnInit {
         sendAt: firebase.firestore.FieldValue.serverTimestamp()
       })
       .then(function () {
-        $('#modalSolver').modal('close');
-        (document.getElementById('formSolver') as HTMLFormElement).reset();
+        that.notifyService.criarNotificacao("Solução do desafio enviado com sucesso.", "success");
+        UIkit.modal('#modal-solucao-desafio').hide();
+        (document.getElementById('solucaoForm') as HTMLFormElement).reset();
       })
       .catch(function () {
       });
@@ -303,13 +304,18 @@ export class DesafiosComponent implements OnInit {
       });
   }
 
-  completeDesafio() {
-    this.db.collection("desafios").doc(this.found.id)
+  completeDesafio(idDesafio) {
+    var that = this;
+
+    console.log(idDesafio);
+
+    this.db.collection("desafios").doc(idDesafio)
       .update({
         status: 'concluído'
       })
       .then(function () {
-        $('#modalComplete').modal('close');
+        that.notifyService.criarNotificacao("Desafio concluido com sucesso.", "success");
+        UIkit.modal('#modal-concluir-desafio').hide();
       })
       .catch(function () {
         // The document probably doesn't exist.
@@ -324,12 +330,12 @@ export class DesafiosComponent implements OnInit {
 
   setRemunerado() {
     this.cleanFilters();
-    this.remunerado = "Sim";
+    this.remuneradoFilter = true;
   }
 
   setArea(string) {
     this.cleanFilters();
-    this.area = string;
+    this.areaFilter = string;
   }
 
 }
