@@ -6,8 +6,8 @@
       <div uk-grid>
         <div class="uk-width-1-2">
 
-          <a class="uk-button uk-button-default" href="" uk-toggle="target: #modal-criar-novo" (click)="toggleEditar()"><span
-              class="uk-margin-right" uk-icon="icon: plus"></span>
+          <a class="uk-button uk-button-default" href="" uk-toggle="target: #modal-criar-novo"
+            (click)="toggleEditar()"><span class="uk-margin-right" uk-icon="icon: plus"></span>
             Criar Novo</a>
           <div class="uk-inline">
             <button class="uk-button uk-button-default" type="button" uk-icon="icon: triangle-down">Área</button>
@@ -68,7 +68,8 @@
                   {{desafio.prazo}}</span></a>
               <div class="uk-accordion-content">
                 <a href="" class="uk-icon-button uk-margin-right icon-blue" title="Editar Desafio"
-                  uk-toggle="target: #modal-criar-novo" (click)="findOne(desafio.id)"><i class="fas fa-pencil-alt"></i></a>
+                  uk-toggle="target: #modal-criar-novo" (click)="findOne(desafio.id)"><i
+                    class="fas fa-pencil-alt"></i></a>
                 <a href="" class="uk-icon-button uk-margin-right icon-red" uk-toggle="target: #modal-deletar-desafio"
                   title="Deletar Desafio" (click)="setDesafioExcluir(desafio.id)"><i class="far fa-trash-alt"></i></a>
                 <a href="" class="uk-icon-button uk-margin-right icon-green" title="Concluir Desafio"
@@ -117,56 +118,64 @@
 <!--Modal Criar Novo / Editar Desafio-->
 <div id="modal-criar-novo" uk-modal>
   <div style="width: 800px;" class="uk-modal-dialog uk-modal-body">
-    <button class="uk-modal-close-default" type="button" uk-close></button>
-    <h2 class="uk-modal-title ap-title">{{tituloModal}}</h2>
+    <form id="createForm" #createForm="ngForm" (ngSubmit)="createDesafio(createForm)">
+      <button class="uk-modal-close-default" type="button" uk-close></button>
+      <h2 class="uk-modal-title ap-title">{{tituloModal}}</h2>
 
-    <div uk-grid>
-      <div class="uk-width-1-1">
-        <input id="nome" class="uk-input" type="text" name="nome" [(ngModel)]="desafio.nome" required placeholder="Nome do Desafio">
-      </div>
-      <div class="uk-width-1-2">
-        <select id="selectArea" name="area" [(ngModel)]="desafio.area" class="uk-select">
-          <!--<option selected disabled>Selecione a Área</option>-->
-          <option *ngFor="let area of areaoptions | async" [ngValue]="area.nome" [selected]="Selecione">
-            {{ area.nome }}
-          </option>
-        </select>
-      </div>
-      <div class="uk-width-1-2">
-        <ng2-flatpickr id="prazo" name="prazo" [config]="exampleOptions" placeholder="{{desafio.prazo}}"></ng2-flatpickr>
+
+      <div uk-grid>
+        <div class="uk-width-1-1">
+          <input [class.uk-form-danger]="!nome.valid && nome.touched" id="nome" class="uk-input" type="text" name="nome"
+            [(ngModel)]="desafio.nome" required placeholder="Nome do Desafio" #nome="ngModel">
+          <span class="uk-text-small" *ngIf="!nome.valid && nome.touched">Nome é obrigatório</span>
+        </div>
+
+        <div class="uk-width-1-2">
+          <select id="selectArea" name="area" [(ngModel)]="desafio.area" class="uk-select">
+            <option [ngValue]="default" [selected]="true" [disabled]="true">Selecione a Área</option>
+            <option *ngFor="let area of areaoptions | async" [ngValue]="area.nome" [selected]="Selecione">
+              {{ area.nome }}
+            </option>
+          </select>
+        </div>
+        <div class="uk-width-1-2">
+          <ng2-flatpickr *ngIf="flagEditar; else create" id="prazo" name="prazo" [config]="exampleOptions"
+            placeholder="{{desafio.prazo}}">
+          </ng2-flatpickr>
+          <ng-template #create>
+            <ng2-flatpickr id="prazo" name="prazo" [config]="exampleOptions"
+              placeholder="Selecione o Prazo para submissão">
+            </ng2-flatpickr>
+          </ng-template>
+
+        </div>
+
+        <div>
+          <label [class.color-success]="createForm.value.remunerado">Desafio Remunerado <input id="remunerado"
+              #remunerado class="uk-checkbox" [(ngModel)]="desafio.remunerado" type="checkbox"
+              name="remunerado"></label>
+        </div>
+
+        <div class="uk-width-1-1">
+          <textarea id="resumo" class="uk-textarea" name="resumo" required [(ngModel)]="desafio.resumo"
+            placeholder="Resumo do Desafio"></textarea>
+        </div>
+
       </div>
 
-      <div>
-        <p>
-          <label>
-            <input id="sim" class="uk-radio uk-margin-right" value="Sim" type="radio" [(ngModel)]="desafio.remunerado"/>
-            <span>Remunerado</span>
-          </label>
-        </p>
-        <p>
-          <label>
-            <input id="nao" class="uk-radio uk-margin-right" value="Não" type="radio" [(ngModel)]="desafio.remunerado"/>
-            <span>Não Remunerado</span>
-          </label>
-        </p>
+
+      <div class="uk-flex uk-flex-right uk-margin-top">
+        <div>
+          <button class="uk-button uk-button-primary uk-margin-right" type="submit" *ngIf="!flagEditar; else editar"
+            [disabled]="!(createForm.value.area) || !(createForm.valid)">Criar Desafio</button>
+          <ng-template #editar>
+            <button class="uk-button uk-button-primary uk-margin-right" type="submit" (click)="editDesafio()">Editar
+              Desafio</button>
+          </ng-template>
+          <button class="uk-button uk-button-default uk-modal-close" type="button">Cancelar</button>
+        </div>
       </div>
-
-      <div class="uk-width-1-1">
-        <textarea id="resumo" class="uk-textarea" name="resumo" required [(ngModel)]="desafio.resumo" placeholder="Resumo do Desafio"></textarea>
-      </div>
-
-    </div>
-
-    <div class="uk-flex uk-flex-right uk-margin-top">
-      <div>
-        <button class="uk-button uk-button-primary uk-margin-right" type="button" (click)="createDesafio()" *ngIf="!flagEditar; else editar">Criar Desafio</button>
-        <ng-template #editar>
-            <button class="uk-button uk-button-primary uk-margin-right" type="button" (click)="editDesafio()">Editar Desafio</button>
-        </ng-template>
-        <button class="uk-button uk-button-default uk-modal-close" type="button">Cancelar</button>
-      </div>
-    </div>
-
+    </form>
   </div>
 </div>
 
@@ -183,7 +192,8 @@
     </div>
 
     <div class="uk-modal-footer uk-text-right">
-      <button class="uk-button uk-button-primary uk-margin-right" type="button" (click)="deleteDesafio()">Deletar Desafio</button>
+      <button class="uk-button uk-button-primary uk-margin-right" type="button" (click)="deleteDesafio()">Deletar
+        Desafio</button>
       <button class="uk-button uk-button-default uk-modal-close" type="button">Cancelar</button>
     </div>
 
@@ -199,11 +209,13 @@
       <h2 class="uk-modal-title ap-title">Confirmação</h2>
     </div>
     <div class="uk-modal-body">
-      <p>Tem certeza que deseja marcar este desafio como concluído? Não será mais possível receber soluções para ele.</p>
+      <p>Tem certeza que deseja marcar este desafio como concluído? Não será mais possível receber soluções para ele.
+      </p>
     </div>
 
     <div class="uk-modal-footer uk-text-right">
-      <button class="uk-button uk-button-primary uk-margin-right" type="button" (click)="completeDesafio()">Confirmar Conclusão</button>
+      <button class="uk-button uk-button-primary uk-margin-right" type="button" (click)="completeDesafio()">Confirmar
+        Conclusão</button>
       <button class="uk-button uk-button-default uk-modal-close" type="button">Cancelar</button>
     </div>
   </div>

@@ -7,5 +7,5 @@ export class Desafio {
     area: string;
     emaildemandante: string;
     status: string;
-    remunerado: string;
+    remunerado: boolean;
 }

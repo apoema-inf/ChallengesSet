@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
@@ -53,9 +53,9 @@ export class DesafiosComponent implements OnInit {
   flagEditar: boolean;
   tituloModal: string = 'Criar Novo Desafio';
 
+
   exampleOptions: FlatpickrOptions;
   constructor(private db: AngularFirestore, private authService: AuthService, private notifyService: NotifyService) {
-
 
     var that = this;
     authService.getUser().then(function (user) {
@@ -152,18 +152,20 @@ export class DesafiosComponent implements OnInit {
   }
 
   toggleEditar() {
-    (document.getElementById("nao") as HTMLInputElement).checked = true;
     this.flagEditar = false;
     this.tituloModal = 'Criar Novo Desafio';
     this.desafio = new Desafio();
   }
 
-  createDesafio() {
-    $.LoadingOverlay("show");
+  createDesafio(form) {
 
-    if (this.desafio.remunerado != "Sim") {
-      this.desafio.remunerado = "Não";
+    console.log(form.value.remunerado)
+
+    if(form.value.remunerado == undefined) {
+      this.desafio.remunerado = false;
     }
+
+    $.LoadingOverlay("show");
 
     if (this.desafio.nome == (null || '' || undefined) ||
       this.desafio.prazo == (null || '' || undefined) ||
@@ -187,6 +189,7 @@ export class DesafiosComponent implements OnInit {
       .then(function () {
         UIkit.modal('#modal-criar-novo').hide();
         $.LoadingOverlay("hide");
+        (document.getElementById('createForm') as HTMLFormElement).reset();
       })
       .catch(function () {
         $.LoadingOverlay("hide");
@@ -212,6 +215,8 @@ export class DesafiosComponent implements OnInit {
           that.desafio.prazo = doc.data().prazo;
           that.desafio.id = doc.id;
           that.desafio.status = doc.data().status;
+          that.desafio.remunerado = doc.data().remunerado;
+        
         } else {
           // doc.data() will be undefined in this case
           console.log("No such document!");
@@ -234,10 +239,6 @@ export class DesafiosComponent implements OnInit {
 
   editDesafio() {
     var that = this;
-
-    if (this.desafio.remunerado != "Sim") {
-      this.desafio.remunerado = "Não";
-    }
 
     this.db.collection("desafios").doc(this.desafio.id)
       .update({
