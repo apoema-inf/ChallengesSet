@@ -75,6 +75,7 @@ export class AuthService {
       })
       .catch(err => {
         $.LoadingOverlay("hide");
+        that.notifyService.criarNotificacao(err.message, "warning");
       });
   }
 
@@ -91,9 +92,11 @@ export class AuthService {
   }
 
   forgotPassword(email) {
-
+    var that = this;
     this.firebaseAuth.auth.sendPasswordResetEmail(email).then(function () {
+      that.notifyService.criarNotificacao("E-mail enviado para " + email, "primary");
     }).catch(function (error) {
+      that.notifyService.criarNotificacao(error.message, "primary");
     });
   }
 

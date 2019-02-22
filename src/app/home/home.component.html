@@ -4,32 +4,37 @@
             <div>
                 <div *ngIf="!(authService.userObservable | async)" class="uk-card uk-card-default uk-card-large uk-card-body ">
                     <h3 align="center" class="uk-card-title title-login">Login</h3>
-                    <form (keyup.enter)="login()">
+                    <form (keyup.enter)="login()" id="loginForm" #loginForm="ngForm">
 
                         <div class="uk-margin">
                             <div class="uk-inline uk-width-1-1">
                                 <span class="uk-form-icon" uk-icon="icon: user"></span>
-                                <input class="uk-input" type="text" name="email" [(ngModel)]="email">
+                                <input class="uk-input" type="text" name="email" [(ngModel)]="email" #emailLogin="ngModel"
+                                [class.border-red]="!emailLogin.valid && emailLogin.touched" required="true" [email]="true">
+
                             </div>
+                            <span class="uk-text-small" *ngIf="!emailLogin.valid && emailLogin.touched">O e-mail é obrigatório</span>
                         </div>
 
                         <div class="uk-margin">
                             <div class="uk-inline uk-width-1-1">
                                 <span class="uk-form-icon" uk-icon="icon: lock"></span>
-                                <input class="uk-input" type="password" name="senha" [(ngModel)]="password">
+                                <input class="uk-input" type="password" name="senha" [(ngModel)]="password" #passwordLogin="ngModel"
+                                [class.border-red]="!(loginForm.value.senha) && passwordLogin.touched">
                             </div>
+                            <span class="uk-text-small" *ngIf="!(loginForm.value.senha) && passwordLogin.touched">A senha é obrigatório</span>
                         </div>
 
                     </form>
                     <div class="uk-flex uk-flex-center">
                         <div>
-                            <button class="uk-button uk-button-primary entrar" (click)="login()">Entrar</button>
+                            <button class="uk-button uk-button-primary entrar" (click)="login()" [disabled]="!(loginForm.valid) || !(loginForm.value.senha)">Entrar</button>
                         </div>
                     </div>
                     <br>
                     <div class="uk-flex uk-flex-between">
                         <div><a class="uk-button uk-button-text" href="" routerLink="/cadastro">Cadastrar-se</a></div>
-                        <div><button class="uk-button uk-button-text" (click)="forgotPassword()">Recuperar
+                        <div><button class="uk-button uk-button-text" (click)="forgotPassword()" [disabled]="!(loginForm.value.email)">Recuperar
                                 senha</button></div>
                     </div>
 
