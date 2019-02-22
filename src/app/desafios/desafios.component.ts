@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
@@ -7,13 +7,11 @@ import { Solver } from '../models/solver.model';
 import * as firebase from 'firebase';
 import { Area } from '../models/area.model';
 import { AuthService } from '../services/auth.service';
-import { Moment } from 'moment';
 import { FlatpickrOptions } from 'ng2-flatpickr';
 import confirmDatePlugin from 'flatpickr/dist/plugins/confirmDate/confirmDate';
 
 import Brazilian from 'flatpickr/dist/l10n/pt.js';
 import { NotifyService } from '../services/notify.service';
-import { forEach } from '@angular/router/src/utils/collection';
 
 declare var $: any;
 declare var UIkit: any;
@@ -25,23 +23,12 @@ declare var UIkit: any;
 })
 export class DesafiosComponent implements OnInit {
 
-  date: Date = new Date();
-  settings = {
-    bigBanner: true,
-    timePicker: true,
-    format: 'dd-MMM-yyyy hh:mm a z-0300',
-    defaultOpen: false,
-  }
   desafios: Observable<Desafio[]>;
-  area2: string = "";
   solucoes: Observable<Solver[]>;
   areaoptions: Observable<Area[]>;
   userEmail: string;
   user: any;
   desafio: Desafio = new Desafio();
-  hora: string;
-  prazo: string = "";
-  found: Desafio = new Desafio();
   solver: Solver = new Solver();
   solverFound: Solver = new Solver();
   solucoesArray: string[] = [''];
@@ -54,9 +41,8 @@ export class DesafiosComponent implements OnInit {
   desafioExcluir: any;
   flagEditar: boolean;
   tituloModal: string = 'Criar Novo Desafio';
-
-
   exampleOptions: FlatpickrOptions;
+  
   constructor(private db: AngularFirestore, private authService: AuthService, private notifyService: NotifyService) {
 
     var that = this;
@@ -88,8 +74,7 @@ export class DesafiosComponent implements OnInit {
 
             data.id = a.payload.doc.id;
 
-
-            if (data.emailsolver == this.user.email)
+            if (this.user && data.emailsolver == this.user.email)
               that.solucoesArray.push(data.idDesafio);
 
             return data;

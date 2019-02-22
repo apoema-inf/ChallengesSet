@@ -83,7 +83,7 @@
 
                 <ul class="uk-margin-large-right uk-margin-large-left" uk-accordion
                   *ngFor="let solucao of solucoes | async">
-                  <li *ngIf="desafio.id == solucao.idDesafio && desafio.emaildemandante == user.email">
+                  <li *ngIf="desafio.id == solucao.idDesafio && desafio.emaildemandante == user?.email">
                     <a class="uk-accordion-title bg-yelllow" href="#"><i
                         class="fas fa-lightbulb uk-margin-right"></i>Solução do
                       {{solucao.solver}} - {{solucao.emailsolver}}</a>
@@ -102,7 +102,7 @@
                     class="uk-margin-right" uk-icon="icon: file-edit"></span>
                   Solucionar</a>
                 <a class="uk-button uk-button-primary" (click)="findOneSolver(desafio.id)"
-                  *ngIf="desafio.emaildemandante !== user.email && user.profile != 'Demandante' && solucoesArray.includes(desafio.id)"
+                  *ngIf="desafio.emaildemandante !== user?.email && user?.profile != 'Demandante' && solucoesArray.includes(desafio.id)"
                   uk-toggle="target: #modal-ver-solucao" (click)="findOneSolver(desafio.id)"><i
                     class="far fa-eye uk-margin-right"></i>Visualizar Solução</a>
               </div>

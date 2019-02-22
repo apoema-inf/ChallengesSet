@@ -22,7 +22,6 @@ import { ContaComponent } from './conta/conta.component';
 import { DesafiosComumComponent } from './desafios-comum/desafios-comum.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { FooterComponent } from './footer/footer.component';
-import { AngularDateTimePickerModule } from 'angular2-datetimepicker';
 
 import { Ng2FlatpickrModule } from 'ng2-flatpickr';
 
@@ -41,8 +40,7 @@ const appRoutes: Routes = [
   {
     path: 'desafios',
     component: DesafiosComponent,
-    data: { title: 'Desafios' },
-    canActivate: [AuthGuard]
+    data: { title: 'Desafios' }
   },
   {
     path: 'minha-conta',
@@ -95,7 +93,6 @@ const appRoutes: Routes = [
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,
     AngularFirestoreModule,
-    AngularDateTimePickerModule,
     Ng2FlatpickrModule
   ],
   providers: [AuthService, AuthGuard],
