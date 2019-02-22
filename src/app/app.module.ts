@@ -19,7 +19,6 @@ import { AngularFireAuthModule } from 'angularfire2/auth';
 import { AuthService } from './services/auth.service';
 import { AuthGuard } from './services/auth-guard.service';
 import { ContaComponent } from './conta/conta.component';
-import { DesafiosComumComponent } from './desafios-comum/desafios-comum.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { FooterComponent } from './footer/footer.component';
 
@@ -32,10 +31,6 @@ const appRoutes: Routes = [
     path: 'home',
     component: HomeComponent,
     data: { title: 'Home' }
-  },
-  {
-    path: 'desafios-comum',
-    component: DesafiosComumComponent
   },
   {
     path: 'desafios',
@@ -78,7 +73,6 @@ const appRoutes: Routes = [
     DemandantesComponent,
     CadastroComponent,
     ContaComponent,
-    DesafiosComumComponent,
     NavbarComponent,
     FooterComponent
   ],

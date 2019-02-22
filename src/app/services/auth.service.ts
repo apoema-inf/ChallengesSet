@@ -35,6 +35,7 @@ export class AuthService {
         })
         that.notifyService.criarNotificacao("<span uk-icon=\'icon: check\'></span> Cadastro criado com sucesso!", "success");
         (document.getElementById('cadastroForm') as HTMLFormElement).reset();
+        that.router.navigate(['/desafios']);
       })
       .catch(err => {
         that.notifyService.criarNotificacao("<span uk-icon=\'icon: ban\'></span>" + err.message, "danger");

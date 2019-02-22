@@ -6,7 +6,7 @@
       <div uk-grid>
         <div class="uk-width-1-2">
 
-          <a class="uk-button uk-button-default uk-margin-right" href="" uk-toggle="target: #modal-criar-novo"
+          <a *ngIf="!isSolver() && user" class="uk-button uk-button-default uk-margin-right" href="" uk-toggle="target: #modal-criar-novo"
             (click)="toggleEditar()"><span class="uk-margin-right" uk-icon="icon: plus"></span>
             Criar Novo</a>
           <div class="uk-inline uk-margin-right">
@@ -22,7 +22,7 @@
             <button class="uk-button uk-button-default" type="button" uk-icon="icon: triangle-down">Ver</button>
             <div uk-dropdown>
               <ul class="uk-nav uk-dropdown-nav">
-                <li *ngIf="user?.profile !== 'Solucionador'" class="uk-active"><a (click)="setUserEmail()"><i
+                <li *ngIf="!isSolver() && user" class="uk-active"><a (click)="setUserEmail()"><i
                       class="fas fa-user uk-margin-right"></i>Meus
                     Desafios</a></li>
                 <li (click)="cleanFilters()" class="uk-active"><a><i class="fas fa-infinity uk-margin-right"></i>Todos
@@ -39,7 +39,7 @@
                 <li class="uk-active"><a (click)="setRemunerado()"><i
                       class="fas fa-dollar-sign uk-margin-right"></i>Desafios
                     Remunerados</a></li>
-                <li *ngIf="user?.profile != 'Demandante'" class="uk-active"><a (click)="minhasSolucoes()"><i
+                <li *ngIf="!isDemandante() && user" class="uk-active"><a (click)="minhasSolucoes()"><i
                       class="far fa-lightbulb uk-margin-right"></i>Minhas
                     soluções</a></li>
               </ul>
@@ -66,12 +66,12 @@
                   class="uk-align-right"><i class="far fa-clock uk-margin-right"></i>Prazo para Submissão
                   {{desafio.prazo}}</span></a>
               <div class="uk-accordion-content">
-                <a href="" class="uk-icon-button uk-margin-right icon-blue" title="Editar Desafio"
+                <a *ngIf="desafio.emaildemandante == user?.email && desafio.status == 'submissão'" href="" class="uk-icon-button uk-margin-right icon-blue" title="Editar Desafio"
                   uk-toggle="target: #modal-criar-novo" (click)="findOne(desafio.id)"><i
                     class="fas fa-pencil-alt"></i></a>
-                <a href="" class="uk-icon-button uk-margin-right icon-red" uk-toggle="target: #modal-deletar-desafio"
+                <a *ngIf="desafio.emaildemandante == user?.email && desafio.status == 'submissão'"  href="" class="uk-icon-button uk-margin-right icon-red" uk-toggle="target: #modal-deletar-desafio"
                   title="Deletar Desafio" (click)="setDesafioExcluir(desafio.id)"><i class="far fa-trash-alt"></i></a>
-                <a href="" class="uk-icon-button uk-margin-right icon-green" title="Concluir Desafio"
+                <a *ngIf="desafio.emaildemandante == user?.email && desafio.status != 'concluído'" href="" class="uk-icon-button uk-margin-right icon-green" title="Concluir Desafio"
                   uk-toggle="target: #modal-concluir-desafio" (click)="findOne(desafio.id)"><i
                     class="fas fa-check"></i></a>
 
@@ -98,11 +98,11 @@
 
                 <a class="uk-button uk-button-primary" uk-toggle="target: #modal-criar-novo"
                   (click)="getDesafioId(desafio.id)" uk-toggle="target: #modal-solucao-desafio"
-                  *ngIf="desafio.emaildemandante !== user?.email && desafio.status != 'concluído' && user?.profile != 'Demandante' && !(solucoesArray.includes(desafio.id))"><span
+                  *ngIf="desafio.emaildemandante !== user?.email && desafio.status != 'concluído' && !isDemandante() && !(solucoesArray.includes(desafio.id)) && user"><span
                     class="uk-margin-right" uk-icon="icon: file-edit"></span>
                   Solucionar</a>
                 <a class="uk-button uk-button-primary" (click)="findOneSolver(desafio.id)"
-                  *ngIf="desafio.emaildemandante !== user?.email && user?.profile != 'Demandante' && solucoesArray.includes(desafio.id)"
+                  *ngIf="desafio.emaildemandante !== user?.email && !isDemandante() && solucoesArray.includes(desafio.id)"
                   uk-toggle="target: #modal-ver-solucao" (click)="findOneSolver(desafio.id)"><i
                     class="far fa-eye uk-margin-right"></i>Visualizar Solução</a>
               </div>
@@ -148,11 +148,11 @@
 
                 <a class="uk-button uk-button-primary" uk-toggle="target: #modal-criar-novo"
                   (click)="getDesafioId(desafio.id)" uk-toggle="target: #modal-solucao-desafio"
-                  *ngIf="desafio.emaildemandante !== user?.email && desafio.status != 'concluído' && user?.profile != 'Demandante' && !(solucoesArray.includes(desafio.id))"><span
+                  *ngIf="desafio.emaildemandante !== user?.email && desafio.status != 'concluído' && !isDemandante() && !(solucoesArray.includes(desafio.id))"><span
                     class="uk-margin-right" uk-icon="icon: file-edit"></span>
                   Solucionar</a>
                 <a class="uk-button uk-button-primary" (click)="findOneSolver(desafio.id)"
-                  *ngIf="desafio.emaildemandante !== user.email && user.profile != 'Demandante' && solucoesArray.includes(desafio.id)"
+                  *ngIf="desafio.emaildemandante !== user.email && !isDemandante() && solucoesArray.includes(desafio.id)"
                   uk-toggle="target: #modal-ver-solucao" (click)="findOneSolver(desafio.id)"><i
                     class="far fa-eye uk-margin-right"></i>Visualizar Solução</a>
               </div>

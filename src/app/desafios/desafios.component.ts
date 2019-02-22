@@ -42,10 +42,11 @@ export class DesafiosComponent implements OnInit {
   flagEditar: boolean;
   tituloModal: string = 'Criar Novo Desafio';
   exampleOptions: FlatpickrOptions;
-  
+
   constructor(private db: AngularFirestore, private authService: AuthService, private notifyService: NotifyService) {
 
     var that = this;
+
     authService.getUser().then(function (user) {
       that.user = user;
     })
@@ -102,6 +103,31 @@ export class DesafiosComponent implements OnInit {
 
   ngOnInit() {
   }
+
+  //Métodos de Controle de acesso
+  isAmbos(): boolean {
+    if (this.user && this.user.profile == "Ambos")
+      return true;
+    else
+      return false;
+  }
+
+  isDemandante(): boolean {
+    if (this.user && this.user.profile == "Demandante") {
+      return true;
+    }
+
+    else
+      return false;
+  }
+
+  isSolver(): boolean {
+    if (this.user && this.user.profile == "Solucionador")
+      return true;
+    else
+      return false;
+  }
+  //Fim Métodos de Controle
 
   initDesafios() {
     this.desafios = this.db.collection('desafios').snapshotChanges().pipe(map(
