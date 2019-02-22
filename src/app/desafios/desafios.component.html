@@ -6,10 +6,10 @@
       <div uk-grid>
         <div class="uk-width-1-2">
 
-          <a class="uk-button uk-button-default" href="" uk-toggle="target: #modal-criar-novo"
+          <a class="uk-button uk-button-default uk-margin-right" href="" uk-toggle="target: #modal-criar-novo"
             (click)="toggleEditar()"><span class="uk-margin-right" uk-icon="icon: plus"></span>
             Criar Novo</a>
-          <div class="uk-inline">
+          <div class="uk-inline uk-margin-right">
             <button class="uk-button uk-button-default" type="button" uk-icon="icon: triangle-down">Área</button>
             <div uk-dropdown>
               <ul class="uk-nav uk-dropdown-nav">
@@ -48,7 +48,7 @@
         </div>
         <div>
 
-          <div class="uk-margin">
+          <div class="uk-margin" uk-grid>
             <form class="uk-search uk-search-default uk-width-large">
               <span class="uk-search-icon-flip" uk-search-icon></span>
               <input [(ngModel)]="search" name="search" class="uk-search-input" type="search" placeholder="Pesquisar">
