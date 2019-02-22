@@ -21,6 +21,7 @@ import { AuthGuard } from './services/auth-guard.service';
 import { ContaComponent } from './conta/conta.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { FooterComponent } from './footer/footer.component';
+import {LocationStrategy, HashLocationStrategy} from '@angular/common';
 
 import { Ng2FlatpickrModule } from 'ng2-flatpickr';
 
@@ -89,7 +90,7 @@ const appRoutes: Routes = [
     AngularFirestoreModule,
     Ng2FlatpickrModule
   ],
-  providers: [AuthService, AuthGuard],
+  providers: [AuthService, AuthGuard, {provide: LocationStrategy, useClass: HashLocationStrategy}],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
