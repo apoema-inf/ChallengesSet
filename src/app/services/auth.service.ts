@@ -19,7 +19,7 @@ export class AuthService {
 
   constructor(public firebaseAuth: AngularFireAuth, private db: AngularFirestore,
     private router: Router, private notifyService: NotifyService) {
-      this.userObservable = firebaseAuth.authState;
+    this.userObservable = firebaseAuth.authState;
   }
 
   signup(user: User) {
@@ -75,7 +75,19 @@ export class AuthService {
       })
       .catch(err => {
         $.LoadingOverlay("hide");
-        that.notifyService.criarNotificacao(err.message, "warning");
+        switch (err.message) {
+          case "The password is invalid or the user does not have a password.": {
+            that.notifyService.criarNotificacao("A senha é inválida ou o usuário não existe.", "warning");
+            break;
+          }
+          case "There is no user record corresponding to this identifier. The user may have been deleted.": {
+            that.notifyService.criarNotificacao("Usuário não encontrado.", "warning");
+            break;
+          }
+          default: {
+            that.notifyService.criarNotificacao(err.message, "warning");
+          }
+        }
       });
   }
 
@@ -95,8 +107,16 @@ export class AuthService {
     var that = this;
     this.firebaseAuth.auth.sendPasswordResetEmail(email).then(function () {
       that.notifyService.criarNotificacao("E-mail enviado para " + email, "primary");
-    }).catch(function (error) {
-      that.notifyService.criarNotificacao(error.message, "primary");
+    }).catch(function (err) {
+      switch (err.message) {
+        case "There is no user record corresponding to this identifier. The user may have been deleted.": {
+          that.notifyService.criarNotificacao("Usuário não encontrado.", "warning");
+          break;
+        }
+        default: {
+          that.notifyService.criarNotificacao(err.message, "warning");
+        }
+      }
     });
   }
 
