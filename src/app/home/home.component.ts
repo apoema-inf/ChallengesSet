@@ -30,7 +30,7 @@ export class HomeComponent {
     if (this.email == (null || '' || undefined)) {
       return;
     }
-    this.authService.forgotPassword('hyagosouzza@hotmail.com');
+    this.authService.forgotPassword(this.email);
   }
 
 }

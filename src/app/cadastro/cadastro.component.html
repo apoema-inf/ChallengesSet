@@ -1,30 +1,40 @@
 <div class="uk-section">
-  <div class="uk-container">
-    <h2 class="ap-title"><b>Cadastro de novo usuário</b></h2>
-
-    <form  id="cadastroForm">
-      <div class="uk-child-width-1-2@m uk-child-width-1-1@s merge" uk-grid>
-        <div class="uk-flex uk-flex-center">
-          <input class="uk-input" placeholder="E-mail" [(ngModel)]="email" id="email" type="email" name="email" />
+    <div class="uk-container">
+      <h2 class="ap-title"><b>Cadastro de novo usuário</b></h2>
+  
+      <form id="cadastroForm" #cadastroForm="ngForm">
+        <div class="uk-child-width-1-2@m uk-child-width-1-1@s merge" uk-grid>
+          <div class="uk-width-1-2">
+            <input class="uk-input" placeholder="E-mail" [(ngModel)]="usuarioCadastro.email" id="email" type="email" name="email" #emailCadastro="ngModel"
+            [class.border-red]="!emailCadastro.valid && emailCadastro.touched" required>
+            <span class="uk-text-small" *ngIf="!emailCadastro.valid && emailCadastro.touched">O e-mail é obrigatório</span>
+          </div>
+          <div class="uk-width-1-2">
+            <input [(ngModel)]="usuarioCadastro.senha" class="uk-input" type="password" placeholder="Senha" name="senha" required #senhaCadastro="ngModel"
+            [class.border-red]="!senhaCadastro.valid && senhaCadastro.touched"/>
+            <span class="uk-text-small" *ngIf="!senhaCadastro.valid && senhaCadastro.touched">A senha é obrigatória</span>
+          </div>
+          <div class="uk-width-1-2">
+            <input id="nome" class="uk-input" type="text" placeholder="Nome" [(ngModel)]="usuarioCadastro.nome" name="nome" #nomeCadastro="ngModel"
+            [class.border-red]="!nomeCadastro.valid && nomeCadastro.touched" required/>
+            <span class="uk-text-small" *ngIf="!nomeCadastro.valid && nomeCadastro.touched">O nome é obrigatório</span>
+          </div>
+          <div class="uk-width-1-2">
+            <select class="uk-select" [(ngModel)]="usuarioCadastro.profile" name="profile" #perfilCadastro="ngModel" 
+            [class.border-red]="!perfilCadastro.value && perfilCadastro.touched">
+              <option [ngValue]='default' [disabled]="true" [selected]="true">Perfil de usuário</option>
+              <option value='Solucionador'>Solucionador</option>
+              <option value='Demandante'>Demandante</option>
+              <option value='Ambos'>Ambos</option>
+            </select>
+            <span class="uk-text-small" *ngIf="!perfilCadastro.value && perfilCadastro.touched">O perfil é obrigatório</span>
+          </div>
+          <div>
+            <button class="uk-button uk-button-primary" (click)="signup()" 
+            [disabled]="!(cadastroForm.value.profile) || !(cadastroForm.valid)">Cadastrar</button>
+          </div>
         </div>
-        <div>
-          <input [(ngModel)]="user.senha" class="uk-input" type="password" placeholder="Senha" name="senha"/>
-        </div>
-        <div>
-          <input id="nome" class="uk-input" type="text" placeholder="Nome" [(ngModel)]="user.nome" name="nome"/>
-        </div>
-        <div>
-          <select class="uk-select" [(ngModel)]="user.profile" name="profile">
-            <option value='' disabled selected>Perfil de usuário</option>
-            <option value='Solucionador'>Solucionador</option>
-            <option value='Demandante'>Demandante</option>
-            <option value='Ambos'>Ambos</option>
-          </select>
-        </div>
-        <div>
-          <button class="uk-button uk-button-primary" (click)="signup()">Cadastrar</button>
-        </div>
-      </div>
-    </form>
+      </form>
+    </div>
   </div>
-</div>
+  
