@@ -14,6 +14,7 @@ declare var $: any;
 export class CadastroComponent implements OnInit {
 
   user: User = new User();
+  usuarioCadastro: User = new User();
 
   constructor(public authService: AuthService, public router: Router) {
     $.LoadingOverlay("show");
@@ -42,27 +43,6 @@ export class CadastroComponent implements OnInit {
   }
 
   signup() {
-    if (this.user.profile == null ||
-      this.user.profile == undefined ||
-      this.user.profile == '') {
-      this.criarNotificacao("O campo 'Perfil de Usuário' deve ser informado.", "warning");
-      return;
-    } else if (this.user.nome == null ||
-      this.user.nome == undefined ||
-      this.user.nome == '') {
-      this.criarNotificacao("O campo 'Nome' deve ser informado.", "warning");
-      return;
-    } else if (this.user.senha == null ||
-      this.user.senha == undefined ||
-      this.user.senha == '') {
-      this.criarNotificacao("O campo 'Senha' deve ser informado.", "warning");
-      return;
-    } else if (this.user.email == null ||
-      this.user.email == undefined ||
-      this.user.email == '') {
-      this.criarNotificacao("O campo 'E-mail' deve ser informado.", "warning");
-      return;
-    }
-    this.authService.signup(this.user);
+    this.authService.signup(this.usuarioCadastro);
   }
 }
