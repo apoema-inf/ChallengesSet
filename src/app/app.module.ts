@@ -25,7 +25,6 @@ import {LocationStrategy, HashLocationStrategy} from '@angular/common';
 
 import { Ng2FlatpickrModule } from 'ng2-flatpickr';
 
-
 //import { AuthService } from './auth.service';
 const appRoutes: Routes = [
   {
